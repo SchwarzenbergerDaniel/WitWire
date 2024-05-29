@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "304275998023",
+    "project_id": "witwire-ebf8e",
+    "storage_bucket": "witwire-ebf8e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:304275998023:android:15be9dd962d007d470f862",
+        "android_client_info": {
+          "package_name": "com.example.witwire"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwqLf5kiGU1zSb9NX4IS5HOHXlbv8YMnc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
