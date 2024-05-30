@@ -81,10 +81,8 @@ class _UserUploadScreenState extends State<UserUploadScreen> {
                 ),
                 const SizedBox(height: 50),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width, // Full screen width
-                  height: MediaQuery.of(context)
-                      .size
-                      .width, // Maintain square aspect ratio
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.width,
                   child: Image.memory(
                     widget.image,
                   ),

@@ -4,22 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:witwire/firebase_options.dart';
 import 'package:witwire/main.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if (kIsWeb) {
-    await Firebase.initializeApp(
-        options: const FirebaseOptions(
-            apiKey: "AIzaSyAoITeh10d0TgKAZ3Chp9_7CzLQAk2h1vg",
-            authDomain: "witwire-ebf8e.firebaseapp.com",
-            projectId: "witwire-ebf8e",
-            storageBucket: "witwire-ebf8e.appspot.com",
-            messagingSenderId: "304275998023",
-            appId: "1:304275998023:web:34b1651d328d02fb70f862"));
-  } else {
-    await Firebase.initializeApp();
-  }
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await fillDates();
   runApp(const MyApp());
 }
