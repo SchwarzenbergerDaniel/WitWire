@@ -1,45 +1,65 @@
-import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:witwire/firebaseParser/userData.dart';
 
 class PostData {
-  String postID;
+  late String postID;
+  late bool canBeLiked;
   late String uid;
   late String username;
-  late String description;
   late int likes;
-  late bool canBeLiked;
   late String imagePath;
-  late int currentUserLike;
+  late String description;
   late DateTime publishedTime;
-  late List hashtags;
-  PostData({required this.postID, required this.canBeLiked}) {
-    setPost();
-  }
+  late List<String> hashtags;
+  late int currentUserLike;
 
-  void setPost() async {
+  PostData._({
+    required this.postID,
+    required this.canBeLiked,
+    required this.uid,
+    required this.username,
+    required this.likes,
+    required this.imagePath,
+    required this.description,
+    required this.publishedTime,
+    required this.hashtags,
+    required this.currentUserLike,
+  });
+
+  static Future<PostData> create(
+      {required String postID, required bool canBeLiked}) async {
     DocumentSnapshot snap =
         await FirebaseFirestore.instance.collection('posts').doc(postID).get();
     Map<String, dynamic> asMap = (snap.data() as Map<String, dynamic>);
 
-    uid = asMap["uid"];
-    username = asMap["username"];
-    likes = asMap["likes"];
-    imagePath = asMap["imageURL"];
-    description = asMap["description"];
-    publishedTime = asMap["date"];
-    hashtags = asMap["hashtags"];
-
+    String uid = asMap["uid"];
+    String username = asMap["username"];
+    int likes = asMap["likes"];
+    String imagePath = asMap["imageURL"];
+    String description = asMap["description"];
+    DateTime publishedTime = (asMap["date"] as Timestamp).toDate();
+    List<String> hashtags = List<String>.from(asMap["hashtags"]);
     Map<String, dynamic> votes = asMap["votes"] ?? {};
 
     String currentUserUID = UserData.currentLoggedInUser!.uid;
-    if (votes.containsKey(currentUserUID)) {
-      bool userVote = votes[currentUserUID];
-      currentUserLike = userVote ? 1 : 2;
-    } else {
-      currentUserLike = 0;
-    }
+    int currentUserLike = votes.containsKey(currentUserUID) &&
+            votes[currentUserUID] == true
+        ? 1
+        : votes.containsKey(currentUserUID) && votes[currentUserUID] == false
+            ? 2
+            : 0;
+
+    return PostData._(
+      postID: postID,
+      canBeLiked: canBeLiked,
+      uid: uid,
+      username: username,
+      likes: likes,
+      imagePath: imagePath,
+      description: description,
+      publishedTime: publishedTime,
+      hashtags: hashtags,
+      currentUserLike: currentUserLike,
+    );
   }
 }

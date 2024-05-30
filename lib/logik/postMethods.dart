@@ -1,19 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:witwire/firebaseParser/userData.dart';
 
 class PostMethods {
   static void uploadPost(
       String photoURL, String uid, String username, String description) async {
     List<String> hashTags = _getHashTags(description);
 
-    await FirebaseFirestore.instance.collection("posts").doc().set({
+    DateTime today = DateTime.now();
+    CollectionReference postsCollection =
+        FirebaseFirestore.instance.collection("posts");
+    await postsCollection.add({
       'comments': [],
-      'date': DateTime.now(),
+      'date': today,
       'description': description,
       'hashtags': hashTags,
       'imageURL': photoURL,
       'likes': 1,
       'uid': uid,
-      'votes': {uid: true}
+      'votes': {uid: true},
+      'username': UserData.currentLoggedInUser!.username,
+      'profilePictureURL': UserData.currentLoggedInUser!.photoURL
     });
   }
 

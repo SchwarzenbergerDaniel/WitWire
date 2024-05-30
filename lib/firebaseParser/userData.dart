@@ -19,6 +19,7 @@ class UserData {
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSibZzICT3UJ_BuQBQZehq1tmBwrWZ6v7-rSQ&s');
   String username = "";
   String bio = "";
+  late String photoURL;
   late List followers;
   late List following;
 
@@ -39,7 +40,7 @@ class UserData {
     followers = asMap["followers"];
     following = asMap["following"];
 
-    String photoURL = asMap["photoURL"];
+    photoURL = asMap["photoURL"];
     profilePicture = Image.network(photoURL);
   }
 }
