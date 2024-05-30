@@ -47,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
       //Hat funktioniert.
       Widget startPoint;
       UserData.initLoggedInUser().then((valid) {
-        AuthMethods.uploadedToday(FirebaseAuth.instance.currentUser!.uid)
+        AuthMethods.uploadedToday(UserData.currentLoggedInUser!)
             .then((bool uploadToday) {
           if (uploadToday) {
             startPoint = const HomeScreen();

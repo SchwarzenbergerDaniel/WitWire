@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:witwire/firebaseParser/userData.dart';
 
 class PostMethods {
@@ -9,7 +10,7 @@ class PostMethods {
     DateTime today = DateTime.now();
     CollectionReference postsCollection =
         FirebaseFirestore.instance.collection("posts");
-    await postsCollection.add({
+    postsCollection.add({
       'comments': [],
       'date': today,
       'description': description,
@@ -21,6 +22,13 @@ class PostMethods {
       'username': UserData.currentLoggedInUser!.username,
       'profilePictureURL': UserData.currentLoggedInUser!.photoURL
     });
+
+    //User updaten
+    FirebaseFirestore.instance.collection("users").doc(uid).set({
+      "lastupload": DateTime.now(),
+    }, SetOptions(merge: true));
+    UserData.currentLoggedInUser!
+        .setUser(); //Daten des users haben sich geändert.
   }
 
   static List<String> _getHashTags(String description) {

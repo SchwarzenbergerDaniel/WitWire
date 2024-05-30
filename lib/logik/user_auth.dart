@@ -1,7 +1,10 @@
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
+import 'package:witwire/dateMethods.dart';
+import 'package:witwire/firebaseParser/userData.dart';
 import 'package:witwire/logik/imageStorageMethods.dart';
 
 class AuthMethods {
@@ -9,10 +12,22 @@ class AuthMethods {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   static const String _userCollectionName = "users";
 
-  static Future<bool> uploadedToday(String uid) async {
-    //TODO IMPLEMENT THIS METHOD.
+  static Future<bool> uploadedToday(UserData data) async {
+    //Schauen, ob es zwischen der Upload-Zeit von gestern und heute ist oder zwischen der von heute und morgen
+    DateTime now = DateTime.now();
+    Timestamp today =
+        await DateMethods.getTimeStampByKey(DateMethods.getKeyByDate(now));
+    Timestamp tomorrow = await DateMethods.getTimeStampByKey(
+        DateMethods.getKeyByDate(now.add(const Duration(days: 1))));
+    Timestamp yesterday = await DateMethods.getTimeStampByKey(
+        DateMethods.getKeyByDate(now.add(const Duration(days: -1))));
+
+    Timestamp lastUpload = UserData.currentLoggedInUser!.lastupload;
+
     return false;
   }
+
+  static FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   static Future<String> createNewUser(
       {required String email,

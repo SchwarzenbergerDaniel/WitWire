@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:timezone/timezone.dart';
+import 'package:witwire/dateMethods.dart';
 import 'package:witwire/main.dart';
 import 'package:witwire/screens/create/create_screen.dart';
 
@@ -55,34 +56,23 @@ class NewDayProvider extends ChangeNotifier {
     return difference.inSeconds;
   }
 
-  Future<Timestamp> getTimeStampByKey(String key) async {
-    DocumentReference ref = firestore.collection('dates').doc(key);
-    DocumentSnapshot snap = await ref.get();
-    Timestamp timestamp = (snap.data() as Map<String, dynamic>)['date'];
-    return timestamp;
-  }
-
-  String getKeyByDate(DateTime day) {
-    return "${day.year}-${day.month}-${day.day}";
-  }
-
   void start(BuildContext c) async {
     // Datenbank speichert in UTC+2
     final Location timeZone = getLocation('Europe/Berlin');
     DateTime now = TZDateTime.now(timeZone);
-    String todayKey = getKeyByDate(now);
+    String todayKey = DateMethods.getKeyByDate(now);
 
     DateTime tomorrow = now.add(const Duration(days: 1));
-    String tomorrowKey = getKeyByDate(tomorrow);
+    String tomorrowKey = DateMethods.getKeyByDate(tomorrow);
 
-    Timestamp todaysPostTime = await getTimeStampByKey(todayKey);
+    Timestamp todaysPostTime = await DateMethods.getTimeStampByKey(todayKey);
 
     int diffFirstInSeconds = getDifferenceInSeconds(todaysPostTime, now);
     if (diffFirstInSeconds > 0) {
       _secondsUntilNewPost = diffFirstInSeconds;
     } else {
-      _secondsUntilNewPost =
-          getDifferenceInSeconds(await getTimeStampByKey(tomorrowKey), now);
+      _secondsUntilNewPost = getDifferenceInSeconds(
+          await DateMethods.getTimeStampByKey(tomorrowKey), now);
     }
     setTimer();
   }

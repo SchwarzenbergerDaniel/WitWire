@@ -22,6 +22,7 @@ class UserData {
   late String photoURL;
   late List followers;
   late List following;
+  late Timestamp lastupload;
 
   UserData({required this.uid, bool? dontSet}) {
     if (dontSet != true) {
@@ -39,7 +40,7 @@ class UserData {
     bio = asMap["description"];
     followers = asMap["followers"];
     following = asMap["following"];
-
+    lastupload = asMap["lastupload"];
     photoURL = asMap["photoURL"];
     profilePicture = Image.network(photoURL);
   }

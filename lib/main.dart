@@ -57,7 +57,8 @@ class MyApp extends StatelessWidget {
               builder: (context2, valid) {
                 if (valid.connectionState != ConnectionState.waiting) {
                   return FutureBuilder<bool>(
-                    future: AuthMethods.uploadedToday(user.uid),
+                    future: AuthMethods.uploadedToday(
+                        UserData.currentLoggedInUser!),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState != ConnectionState.waiting) {
                         bool? uploadToday = snapshot.data;
