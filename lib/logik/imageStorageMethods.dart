@@ -17,4 +17,17 @@ class ImageStorageMethods {
 
     return url;
   }
+
+  Future<String> uploadPostPicture(Uint8List img) async {
+    const String folderName = "postPictures";
+
+    Reference ref =
+        _storage.ref().child(folderName).child(_auth.currentUser!.uid);
+    UploadTask task = ref.putData(img);
+    TaskSnapshot sn = await task;
+
+    String url = await sn.ref.getDownloadURL();
+
+    return url;
+  }
 }

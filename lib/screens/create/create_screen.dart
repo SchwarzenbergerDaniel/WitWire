@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:witwire/screens/create/showNextUpload_screen.dart';
 import 'package:witwire/screens/create/userupload/imageselect_screen.dart';
-import 'package:witwire/screens/create/userupload/userupload_screen.dart';
 
 // ignore: must_be_immutable
 class CreateScreen extends StatefulWidget {

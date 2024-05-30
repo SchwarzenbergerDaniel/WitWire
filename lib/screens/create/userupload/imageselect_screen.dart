@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -132,18 +131,18 @@ class UploadImageSelectScreenState extends State<UploadImageSelectScreen> {
   void _selectImageFromGallery() async {
     final img = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (img == null) return;
-    Uint8List? a = await img?.readAsBytes();
+    Uint8List? a = await img.readAsBytes();
     setState(() {
-      _selectedImage = a!;
+      _selectedImage = a;
     });
   }
 
   void _selectImageFromCamera() async {
     final img = await ImagePicker().pickImage(source: ImageSource.camera);
     if (img == null) return;
-    Uint8List? a = await img?.readAsBytes();
+    Uint8List? a = await img.readAsBytes();
     setState(() {
-      _selectedImage = a!;
+      _selectedImage = a;
     });
   }
 

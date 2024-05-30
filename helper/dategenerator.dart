@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:witwire/firebase_options.dart';
 import 'package:witwire/main.dart';
@@ -21,6 +20,7 @@ Future<void> fillDates() async {
 
   final Random random = Random();
   final DateTime today = DateTime.now();
+  print(today.toIso8601String());
   final List<Map<String, dynamic>> dates = [];
 
   for (int i = 0; i < amount; i++) {
