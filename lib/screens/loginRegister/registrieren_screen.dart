@@ -173,7 +173,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           style: TextStyle(color: loginRegisterButtonTextColor),
                         )
                       : const CircularProgressIndicator(
-                          color: brightColor,
+                          color: mainColor,
                         ),
                 ),
               ),

@@ -24,7 +24,6 @@ class _ChatPreviewListState extends State<ChatPreviewList> {
   void fillData() async {
     String myID = UserData.currentLoggedInUser!.uid;
     users = <Preview>[];
-    //users.add(UserData(uid: "Ji4tfQ3isOS0rVhpK5IydArlEp43"));
     QuerySnapshot chatroomsSnapshot = await FirebaseFirestore.instance
         .collection("chats")
         .orderBy("lastmessagetime", descending: true)
@@ -48,7 +47,6 @@ class _ChatPreviewListState extends State<ChatPreviewList> {
                 as Map<String, dynamic>)['lastmessagetime']));
       }
     }
-
     setState(() {
       users = users;
     });
@@ -59,9 +57,9 @@ class _ChatPreviewListState extends State<ChatPreviewList> {
     //Liste von chat_previews machen
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: brightColor,
-        title: const Text("Chats", style: TextStyle(color: brightColor)),
-        backgroundColor: darkColor,
+        foregroundColor: mainColor,
+        title: const Text("Chats", style: TextStyle(color: mainColor)),
+        backgroundColor: secondaryColor,
       ),
       body: ListView.builder(
           padding: const EdgeInsets.only(top: 15),

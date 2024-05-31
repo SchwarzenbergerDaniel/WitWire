@@ -3,14 +3,20 @@ import 'package:witwire/firebaseParser/post_data.dart';
 import 'package:witwire/firebaseParser/user_data.dart';
 
 // ignore: must_be_immutable
-class Post extends StatelessWidget {
+class Post extends StatefulWidget {
   final PostData _post;
-  const Post({required PostData post, super.key}) : _post = post;
 
+  Post({required PostData post, super.key}) : _post = post;
+
+  @override
+  State<Post> createState() => _PostState();
+}
+
+class _PostState extends State<Post> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
       child: Column(
         children: [
           //Ersteller, Datum
@@ -18,19 +24,19 @@ class Post extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 24,
-                backgroundImage: Image(
-                  image: UserData.currentLoggedInUser!.profilePicture.image,
+                backgroundImage: Image.network(
+                  UserData.currentLoggedInUser!.photoURL,
                   fit: BoxFit.cover,
                 ).image,
               ),
               Column(
                 children: [
                   Text(
-                    _post.username,
+                    widget._post.username,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    _post.publishedTime.toString(),
+                    widget._post.publishedTime.toString(),
                   ),
                 ],
               )
@@ -40,13 +46,71 @@ class Post extends StatelessWidget {
           //Bild:
           Container(
             color: Colors.grey,
-            child: Image.network(_post.imagePath,
+            child: Image.network(widget._post.imagePath,
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height * 0.7,
                 fit: BoxFit.fill),
           ),
+
+          //Beschreibung
+
+          Text(widget._post.description),
+
+          //Like, dislike, kommentare
+
+          Row(
+            children: [
+              Text(
+                "     ${widget._post.likes}",
+                style: const TextStyle(
+                    color: Colors.orange, fontWeight: FontWeight.bold),
+              ),
+              widget._post.currentUserLike == 1
+                  ? IconButton(
+                      onPressed: likePressed,
+                      icon: const Icon(Icons.thumb_up_alt_rounded))
+                  : IconButton(
+                      onPressed: likePressed,
+                      icon: const Icon(Icons.thumb_up_alt_outlined),
+                    ),
+              widget._post.currentUserLike == -1
+                  ? IconButton(
+                      onPressed: dislikePressed,
+                      icon: const Icon(Icons.thumb_down_alt_rounded))
+                  : IconButton(
+                      onPressed: dislikePressed,
+                      icon: const Icon(Icons.thumb_down_alt_outlined),
+                    ),
+              IconButton(
+                onPressed: goToComments,
+                icon: const Icon(Icons.chat_bubble_outline),
+              )
+            ],
+          )
         ],
       ),
     );
+  }
+
+  void goToComments() {
+    //TODO:
+  }
+
+  void likePressed() {
+    widget._post.currentUserLike != 1
+        ? widget._post.setCurrentUserLike(1)
+        : widget._post.setCurrentUserLike(0);
+    setState(() {
+      widget._post.currentUserLike = widget._post.currentUserLike;
+    });
+  }
+
+  void dislikePressed() {
+    widget._post.currentUserLike != -1
+        ? widget._post.setCurrentUserLike(-1)
+        : widget._post.setCurrentUserLike(0);
+    setState(() {
+      widget._post.currentUserLike = widget._post.currentUserLike;
+    });
   }
 }

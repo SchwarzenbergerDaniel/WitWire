@@ -25,6 +25,30 @@ class PostData {
     required this.hashtags,
     required this.currentUserLike,
   });
+  void setCurrentUserLike(int newstatus) async {
+    if (newstatus == currentUserLike) return;
+
+    int diff = newstatus - currentUserLike;
+    likes += diff;
+
+    DocumentReference postRef =
+        FirebaseFirestore.instance.collection("posts").doc(postID);
+    if (newstatus == 0) {
+      postRef.update({
+        'votes.$uid': FieldValue.delete(),
+      });
+    } else {
+      bool isLike = newstatus == 1;
+      postRef.update({
+        'votes.$uid': isLike,
+      });
+    }
+    currentUserLike = newstatus;
+
+    postRef.update({
+      'likes': FieldValue.increment(diff),
+    });
+  }
 
   static Future<PostData> create(
       {required String postID, required bool canBeLiked}) async {
@@ -46,7 +70,7 @@ class PostData {
             votes[currentUserUID] == true
         ? 1
         : votes.containsKey(currentUserUID) && votes[currentUserUID] == false
-            ? 2
+            ? -1
             : 0;
 
     return PostData._(

@@ -49,7 +49,7 @@ class _ShowNextUploadScreenState extends State<ShowNextUploadScreen> {
                 Column(
                   children: [
                     value.minuteUntilNewPost == null
-                        ? const CircularProgressIndicator(color: darkColor)
+                        ? const CircularProgressIndicator(color: secondaryColor)
                         : Text(
                             getTimeToDisplayByMinutes(
                                 value.minuteUntilNewPost!),

@@ -13,7 +13,6 @@ class UploadImageSelectScreen extends StatefulWidget {
       UploadImageSelectScreenState();
 }
 
-//TODO: Nachdem das Bild ausgewählt worden ist zu UserUploadScreen
 class UploadImageSelectScreenState extends State<UploadImageSelectScreen> {
   Uint8List? _selectedImage;
 

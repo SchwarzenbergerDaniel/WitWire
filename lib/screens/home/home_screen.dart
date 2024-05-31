@@ -16,9 +16,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const FriendsAndChatAppBar(),
-      backgroundColor: brightColor,
+      backgroundColor: mainColor,
       body: Center(
-        child: UserData.currentLoggedInUser!.profilePicture,
+        child: Image.network(UserData.currentLoggedInUser!.photoURL),
       ),
       bottomNavigationBar: BottomNavBar(0),
     );

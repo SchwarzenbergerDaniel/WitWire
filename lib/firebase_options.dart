@@ -46,6 +46,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '304275998023',
     projectId: 'witwire-ebf8e',
     authDomain: 'witwire-ebf8e.firebaseapp.com',
+    databaseURL: 'https://witwire-ebf8e.firebasedatabase.app', // IMPORTANT!
     storageBucket: 'witwire-ebf8e.appspot.com',
   );
 

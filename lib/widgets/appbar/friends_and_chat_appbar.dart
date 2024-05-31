@@ -36,7 +36,7 @@ class FriendsAndChatAppBar extends StatelessWidget
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
-            color: brightColor,
+            color: mainColor,
             onPressed: () => showFriends(context),
             iconSize: 30,
             icon: const Icon(Icons.people),
@@ -44,7 +44,7 @@ class FriendsAndChatAppBar extends StatelessWidget
           Image.asset('assets/appbar-image.png',
               fit: BoxFit.fill, width: imageWidth),
           IconButton(
-            color: brightColor,
+            color: mainColor,
             onPressed: () => jumpToChat(context),
             iconSize: 30,
             icon: const Icon(Icons.chat),

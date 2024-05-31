@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 
 class UserData {
   static UserData? _currentLoggedInUser;
@@ -15,8 +14,6 @@ class UserData {
 
   late String email;
   late String uid;
-  Image profilePicture = Image.network(
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSibZzICT3UJ_BuQBQZehq1tmBwrWZ6v7-rSQ&s');
   String username = "";
   String bio = "";
   late String photoURL;
@@ -42,6 +39,5 @@ class UserData {
     following = asMap["following"];
     lastupload = asMap["lastupload"];
     photoURL = asMap["photoURL"];
-    profilePicture = Image.network(photoURL);
   }
 }

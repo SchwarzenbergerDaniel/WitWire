@@ -84,9 +84,9 @@ class _UserUploadScreenState extends State<UserUploadScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CircleAvatar(
-                            backgroundImage: UserData
-                                .currentLoggedInUser!.profilePicture.image,
-                          ),
+                              backgroundImage: Image.network(
+                            UserData.currentLoggedInUser!.photoURL,
+                          ).image),
                           const SizedBox(width: 10),
                           Expanded(
                             child: TextField(

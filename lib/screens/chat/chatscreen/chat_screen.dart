@@ -26,27 +26,22 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //TODO: Chat von user und dem Userdata.Loggedinuser anzeigen.
-    //Sammlung: chats,
-    //Dokument: ID des loggedin users.
-    //Inhalt:
-
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: brightColor,
-        backgroundColor: darkColor,
+        foregroundColor: mainColor,
+        backgroundColor: secondaryColor,
         title: Row(
           children: [
             CircleAvatar(
               radius: 24,
-              backgroundImage: Image(
-                image: widget.user.profilePicture.image,
+              backgroundImage: Image.network(
+                widget.user.photoURL,
                 fit: BoxFit.cover,
               ).image,
             ),
             const SizedBox(width: 20),
             Text(widget.user.username,
-                style: const TextStyle(color: brightColor)),
+                style: const TextStyle(color: mainColor)),
           ],
         ),
       ),

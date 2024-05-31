@@ -70,10 +70,9 @@ class _ChatPreviewState extends State<ChatPreview> {
                   children: [
                     CircleAvatar(
                       radius: 24,
-                      backgroundImage: Image(
-                        image: widget.user.profilePicture.image,
-                        fit: BoxFit.cover,
-                      ).image,
+                      backgroundImage:
+                          Image.network(widget.user.photoURL, fit: BoxFit.cover)
+                              .image,
                     ),
                     const SizedBox(width: 10),
                     Expanded(
