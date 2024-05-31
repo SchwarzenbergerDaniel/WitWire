@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:witwire/firebaseParser/userData.dart';
+import 'package:witwire/firebaseParser/user_data.dart';
 import 'package:witwire/utils/colors.dart';
-import 'package:witwire/widgets/appbar/friendsAndChatAppbar.dart';
+import 'package:witwire/widgets/appbar/friends_and_chat_appbar.dart';
 import 'package:witwire/widgets/bottomnavbar/bottomnavbar.dart';
 
 class HomeScreen extends StatefulWidget {

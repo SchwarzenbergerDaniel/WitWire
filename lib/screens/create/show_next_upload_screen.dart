@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:witwire/firebaseParser/postData.dart';
-import 'package:witwire/logik/getLastDayPosts.dart';
+import 'package:witwire/firebaseParser/post_data.dart';
+import 'package:witwire/logik/get_last_day_posts.dart';
 import 'package:witwire/providers/newdayprovider.dart';
 import 'package:witwire/utils/colors.dart';
-import 'package:witwire/widgets/appbar/friendsAndChatAppbar.dart';
+import 'package:witwire/widgets/appbar/friends_and_chat_appbar.dart';
 import 'package:witwire/widgets/bottomnavbar/bottomnavbar.dart';
 import 'package:witwire/widgets/post/post.dart';
 

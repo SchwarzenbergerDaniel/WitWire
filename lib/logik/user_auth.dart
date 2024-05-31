@@ -1,11 +1,10 @@
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
-import 'package:witwire/dateMethods.dart';
-import 'package:witwire/firebaseParser/userData.dart';
-import 'package:witwire/logik/imageStorageMethods.dart';
+import 'package:witwire/date_methods.dart';
+import 'package:witwire/firebaseParser/user_data.dart';
+import 'package:witwire/logik/image_storage_methods.dart';
 
 class AuthMethods {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -24,10 +23,13 @@ class AuthMethods {
 
     Timestamp lastUpload = UserData.currentLoggedInUser!.lastupload;
 
-    return false;
-  }
+    bool isBetweenYesterdayAndToday =
+        lastUpload.compareTo(yesterday) >= 0 && lastUpload.compareTo(today) < 0;
+    bool isBetweenTodayAndTomorrow =
+        lastUpload.compareTo(today) >= 0 && lastUpload.compareTo(tomorrow) < 0;
 
-  static FirebaseFirestore firestore = FirebaseFirestore.instance;
+    return isBetweenYesterdayAndToday || isBetweenTodayAndTomorrow;
+  }
 
   static Future<String> createNewUser(
       {required String email,
@@ -46,7 +48,7 @@ class AuthMethods {
           email: email, password: password);
       String userID = user.user!.uid;
 
-      String url = await ImageStorageMethods().uploadProfilePicture(file);
+      String url = await ImageStorageMethods.uploadProfilePicture(file);
 
       await _firestore.collection(_userCollectionName).doc(userID).set({
         'username': username,

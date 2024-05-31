@@ -93,7 +93,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               //bild
-              SizedBox(height: 32),
+              const SizedBox(height: 32),
               SvgPicture.asset('assets/logo.svg', height: 128),
 
               const SizedBox(height: 32),
@@ -179,16 +179,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               const SizedBox(height: 16),
 
-              SizedBox(height: 32),
+              const SizedBox(height: 32),
 
               //Registrieren
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    child: const Text("Du hast bereits einen Account? ",
-                        style: TextStyle(color: Colors.grey)),
-                  ),
+                  const Text("Du hast bereits einen Account? ",
+                      style: TextStyle(color: Colors.grey)),
                   GestureDetector(
                     onTap: () => Navigator.push(
                       context,
@@ -196,12 +194,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         builder: (context) => const LoginScreen(),
                       ),
                     ),
-                    child: Container(
-                      child: const Text(
-                        "Meld dich hier an!",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.white),
-                      ),
+                    child: const Text(
+                      "Meld dich hier an!",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.white),
                     ),
                   )
                 ],

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:witwire/firebaseParser/userData.dart';
+import 'package:witwire/firebaseParser/user_data.dart';
 import 'package:witwire/screens/chat/model/message.dart';
 import 'package:witwire/utils/colors.dart';
 
@@ -11,13 +10,11 @@ class ChatScreen extends StatefulWidget {
   UserData user;
 
   @override
-  State<ChatScreen> createState() => _ChatScreenState(user: user);
+  State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  late UserData user;
-
-  _ChatScreenState({required this.user});
+  _ChatScreenState();
 
   final TextEditingController _nachrichtController = TextEditingController();
 
@@ -43,12 +40,13 @@ class _ChatScreenState extends State<ChatScreen> {
             CircleAvatar(
               radius: 24,
               backgroundImage: Image(
-                image: user.profilePicture.image,
+                image: widget.user.profilePicture.image,
                 fit: BoxFit.cover,
               ).image,
             ),
             const SizedBox(width: 20),
-            Text(user.username, style: const TextStyle(color: brightColor)),
+            Text(widget.user.username,
+                style: const TextStyle(color: brightColor)),
           ],
         ),
       ),
@@ -185,7 +183,7 @@ class _ChatScreenState extends State<ChatScreen> {
     if (nachricht.isEmpty) return;
     Message m = Message(
         sender: UserData.currentLoggedInUser!.uid,
-        receiver: user.uid,
+        receiver: widget.user.uid,
         time: Timestamp.now(),
         message: nachricht);
 
@@ -200,7 +198,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   String getChatRoomID() {
-    List<String> room = [user.uid, UserData.currentLoggedInUser!.uid];
+    List<String> room = [widget.user.uid, UserData.currentLoggedInUser!.uid];
     room.sort();
     return "${room[0]}-${room[1]}";
   }

@@ -1,11 +1,8 @@
-import 'dart:math';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
-import 'package:witwire/firebaseParser/userData.dart';
+import 'package:witwire/firebaseParser/user_data.dart';
 import 'package:witwire/firebase_options.dart';
 import 'package:witwire/logik/user_auth.dart';
 import 'package:witwire/providers/newdayprovider.dart';

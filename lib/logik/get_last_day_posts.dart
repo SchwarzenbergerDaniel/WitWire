@@ -1,6 +1,5 @@
-import 'package:witwire/firebaseParser/postData.dart';
+import 'package:witwire/firebaseParser/post_data.dart';
 
-//TODO: Mit korrekten Datenbank-Abfragen verbinden.
 class LastDayPosts {
   static Future<PostData> getTopPost() async {
     return await PostData.create(

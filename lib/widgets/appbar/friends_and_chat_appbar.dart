@@ -19,7 +19,7 @@ class FriendsAndChatAppBar extends StatelessWidget
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ChatPreviewList(),
+        builder: (context) => const ChatPreviewList(),
       ),
     );
   }

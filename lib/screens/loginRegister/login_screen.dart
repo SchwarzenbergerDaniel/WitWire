@@ -1,7 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:witwire/firebaseParser/userData.dart';
+import 'package:witwire/firebaseParser/user_data.dart';
 import 'package:witwire/logik/user_auth.dart';
 import 'package:witwire/screens/create/create_screen.dart';
 import 'package:witwire/screens/home/home_screen.dart';

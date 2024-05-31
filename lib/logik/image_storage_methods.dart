@@ -3,9 +3,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 
 class ImageStorageMethods {
-  final FirebaseStorage _storage = FirebaseStorage.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  Future<String> uploadProfilePicture(Uint8List img) async {
+  static final FirebaseStorage _storage = FirebaseStorage.instance;
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
+  static Future<String> uploadProfilePicture(Uint8List img) async {
     const String folderName = "profilePictures";
 
     Reference ref =
@@ -18,7 +18,7 @@ class ImageStorageMethods {
     return url;
   }
 
-  Future<String> uploadPostPicture(Uint8List img) async {
+  static Future<String> uploadPostPicture(Uint8List img) async {
     const String folderName = "postPictures";
 
     Reference ref =

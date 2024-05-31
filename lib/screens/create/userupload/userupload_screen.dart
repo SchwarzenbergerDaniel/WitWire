@@ -1,10 +1,8 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:witwire/firebaseParser/userData.dart';
-import 'package:witwire/logik/imageStorageMethods.dart';
-import 'package:witwire/logik/postMethods.dart';
+import 'package:witwire/firebaseParser/user_data.dart';
+import 'package:witwire/logik/image_storage_methods.dart';
+import 'package:witwire/logik/post_methods.dart';
 import 'package:witwire/main.dart';
 import 'package:witwire/screens/home/home_screen.dart';
 
@@ -23,8 +21,7 @@ class _UserUploadScreenState extends State<UserUploadScreen> {
       isUploading = true;
     });
     isUploading = true;
-    String photoURL =
-        await ImageStorageMethods().uploadPostPicture(widget.image);
+    String photoURL = await ImageStorageMethods.uploadPostPicture(widget.image);
     String uid = UserData.currentLoggedInUser!.uid;
     String username = UserData.currentLoggedInUser!.username;
     String description = _beschreibungscontroller.text;

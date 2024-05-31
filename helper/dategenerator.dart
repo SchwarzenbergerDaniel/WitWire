@@ -20,7 +20,6 @@ Future<void> fillDates() async {
 
   final Random random = Random();
   final DateTime today = DateTime.now();
-  print(today.toIso8601String());
   final List<Map<String, dynamic>> dates = [];
 
   for (int i = 0; i < amount; i++) {

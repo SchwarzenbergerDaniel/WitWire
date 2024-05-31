@@ -53,7 +53,7 @@ class UploadImageSelectScreenState extends State<UploadImageSelectScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(width: 10), // Space between the images
+                      const SizedBox(width: 10), // Space between the images
                       InkWell(
                         onTap: _selectImageFromCamera,
                         child: SizedBox(
@@ -70,7 +70,7 @@ class UploadImageSelectScreenState extends State<UploadImageSelectScreen> {
                       ),
                     ],
                   )
-                : Container(
+                : SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height * 0.7,
                     child: Image.memory(
@@ -99,7 +99,7 @@ class UploadImageSelectScreenState extends State<UploadImageSelectScreen> {
           _selectedImage != null
               ? Column(
                   children: [
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     ElevatedButton(
                       onPressed: _removeImage,
                       style: ButtonStyle(

@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:witwire/firebaseParser/userData.dart';
+import 'package:witwire/firebaseParser/user_data.dart';
 import 'package:witwire/screens/chat/chatpreview/chat_preview.dart';
-import 'package:witwire/screens/chat/chatpreview/previewData.dart';
+import 'package:witwire/screens/chat/chatpreview/preview_data.dart';
 import 'package:witwire/utils/colors.dart';
 
-// ignore: must_be_immutable
 class ChatPreviewList extends StatefulWidget {
-  ChatPreviewList({super.key});
+  const ChatPreviewList({super.key});
   @override
   State<ChatPreviewList> createState() => _ChatPreviewListState();
 }
@@ -33,7 +32,6 @@ class _ChatPreviewListState extends State<ChatPreviewList> {
 
     for (QueryDocumentSnapshot chatroomDoc in chatroomsSnapshot.docs) {
       var ids = chatroomDoc.id.split('-');
-      print(ids[0]);
       if (ids[0] == myID) {
         users.add(Preview(
             user: UserData(uid: ids[1], dontSet: true),

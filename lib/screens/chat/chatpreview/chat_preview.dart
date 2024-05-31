@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:witwire/firebaseParser/userData.dart';
+import 'package:witwire/firebaseParser/user_data.dart';
 import 'package:witwire/main.dart';
-import 'package:witwire/screens/chat/chatpreview/previewData.dart';
+import 'package:witwire/screens/chat/chatpreview/preview_data.dart';
 import 'package:witwire/screens/chat/chatscreen/chat_screen.dart';
 
 // ignore: must_be_immutable
@@ -10,7 +9,7 @@ class ChatPreview extends StatefulWidget {
   late UserData user;
   late String time;
   late String lastMessage;
-  ChatPreview({required Preview prevData}) {
+  ChatPreview({super.key, required Preview prevData}) {
     user = prevData.user;
     lastMessage = prevData.lastMessage;
     setTime(prevData.time.toDate());
@@ -66,7 +65,7 @@ class _ChatPreviewState extends State<ChatPreview> {
         child: SizedBox(
           height: 50,
           child: loading
-              ? Center(child: CircularProgressIndicator())
+              ? const Center(child: CircularProgressIndicator())
               : Row(
                   children: [
                     CircleAvatar(
