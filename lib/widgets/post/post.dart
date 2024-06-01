@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:witwire/firebaseParser/post_data.dart';
 import 'package:witwire/firebaseParser/user_data.dart';
+import 'package:witwire/utils/colors.dart';
 
 // ignore: must_be_immutable
 class Post extends StatefulWidget {
@@ -29,6 +30,7 @@ class _PostState extends State<Post> {
                   fit: BoxFit.cover,
                 ).image,
               ),
+              const SizedBox(width: 10),
               Column(
                 children: [
                   Text(
@@ -44,12 +46,20 @@ class _PostState extends State<Post> {
           ),
 
           //Bild:
-          Container(
-            color: Colors.grey,
-            child: Image.network(widget._post.imagePath,
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.7,
-                fit: BoxFit.fill),
+          Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width,
+                maxHeight: MediaQuery.of(context).size.height * 0.7,
+              ),
+              child: Container(
+                color: Colors.white, // Set the background color to white
+                child: Image.network(
+                  widget._post.imagePath,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
           ),
 
           //Beschreibung
@@ -97,6 +107,7 @@ class _PostState extends State<Post> {
   }
 
   void likePressed() {
+    if (widget._post.canBeLiked == false) return;
     widget._post.currentUserLike != 1
         ? widget._post.setCurrentUserLike(1)
         : widget._post.setCurrentUserLike(0);
@@ -106,6 +117,8 @@ class _PostState extends State<Post> {
   }
 
   void dislikePressed() {
+    if (widget._post.canBeLiked == false) return;
+
     widget._post.currentUserLike != -1
         ? widget._post.setCurrentUserLike(-1)
         : widget._post.setCurrentUserLike(0);

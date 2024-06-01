@@ -14,7 +14,7 @@ class SearchScreenAppBar extends StatelessWidget
     return PreferredSize(
       preferredSize: const Size.fromHeight(kToolbarHeight + 20),
       child: Container(
-        margin: const EdgeInsets.only(top: 20), // Move AppBar down by 20 pixels
+        margin: const EdgeInsets.only(top: 20),
         child: AppBar(
           centerTitle: true,
           title: Container(
@@ -49,6 +49,5 @@ class SearchScreenAppBar extends StatelessWidget
   }
 
   @override
-  // TODO: implement preferredSize
   Size get preferredSize => const Size.fromHeight(kToolbarHeight + 20);
 }

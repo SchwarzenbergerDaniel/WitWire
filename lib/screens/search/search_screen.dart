@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:witwire/widgets/appbar/search_appbar.dart';
 import 'package:witwire/widgets/bottomnavbar/bottomnavbar.dart';
-import 'package:witwire/widgets/userpreviews/userprev.dart';
+import 'package:witwire/widgets/userpreviews/userprevOnClickProfile.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -12,8 +12,8 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  TextEditingController _controller = TextEditingController();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final TextEditingController _controller = TextEditingController();
   String _searchText = "";
   @override
   Widget build(BuildContext context) {
@@ -29,9 +29,8 @@ class _SearchScreenState extends State<SearchScreen> {
       body: StreamBuilder<QuerySnapshot>(
         stream: getStream(),
         builder: (context, snapshot) {
-          print(snapshot);
           if (!snapshot.hasData) {
-            return CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           }
 
           final users = snapshot.data!.docs;
@@ -39,7 +38,8 @@ class _SearchScreenState extends State<SearchScreen> {
           return ListView.builder(
             itemCount: users.length,
             itemBuilder: (context, index) {
-              return ListTile(title: UserPrev(user: users[index]));
+              return ListTile(
+                  title: UserPrevOnClickProfile(user: users[index]));
             },
           );
         },

@@ -6,6 +6,7 @@ import 'package:witwire/logik/image_storage_methods.dart';
 import 'package:witwire/logik/post_methods.dart';
 import 'package:witwire/main.dart';
 import 'package:witwire/screens/home/home_screen.dart';
+import 'package:witwire/utils/colors.dart';
 
 // ignore: must_be_immutable
 class UserUploadScreen extends StatefulWidget {
@@ -18,15 +19,14 @@ class UserUploadScreen extends StatefulWidget {
 
 class _UserUploadScreenState extends State<UserUploadScreen> {
   void _upload() async {
-    String photoURL = await ImageStorageMethods.uploadPostPicture(widget.image);
-    String uid = UserData.currentLoggedInUser!.uid;
-    String username = UserData.currentLoggedInUser!.username;
-    String description = _beschreibungscontroller.text;
-
-    DateMethods.getTimeStampByKey(DateMethods.getKeyByDate(DateTime.now()))
-        .then((value) => PostMethods.uploadPost(photoURL, uid, username,
-            description, value.toDate().isBefore(DateTime.now())));
-
+    ImageStorageMethods.uploadPostPicture(widget.image).then((photoURL) {
+      String uid = UserData.currentLoggedInUser!.uid;
+      String username = UserData.currentLoggedInUser!.username;
+      String description = _beschreibungscontroller.text;
+      DateMethods.getTimeStampByKey(DateMethods.getKeyByDate(DateTime.now()))
+          .then((value) => PostMethods.uploadPost(photoURL, uid, username,
+              description, value.toDate().isBefore(DateTime.now())));
+    });
     navigatorKey.currentState!.pushAndRemoveUntil(
         //Keine möglichkeit geben zurück zu gehen.
         MaterialPageRoute(
@@ -47,6 +47,7 @@ class _UserUploadScreenState extends State<UserUploadScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: secondaryColor,
         title: Image.asset(
           'assets/appbar-image.png',
           fit: BoxFit.fill,
@@ -59,7 +60,7 @@ class _UserUploadScreenState extends State<UserUploadScreen> {
             child: const Text(
               "Post",
               style: TextStyle(
-                color: Colors.black,
+                color: mainColor,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -91,7 +92,7 @@ class _UserUploadScreenState extends State<UserUploadScreen> {
                             child: TextField(
                               controller: _beschreibungscontroller,
                               decoration: const InputDecoration(
-                                fillColor: Color.fromARGB(255, 216, 215, 215),
+                                fillColor: Color.fromRGBO(215, 215, 215, 1),
                                 hintText: "Beschreibung",
                                 filled: true,
                                 contentPadding: EdgeInsets.all(8),

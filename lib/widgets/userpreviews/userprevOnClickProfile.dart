@@ -1,17 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:witwire/firebaseParser/user_data.dart';
 import 'package:witwire/main.dart';
-import 'package:witwire/screens/chat/chatscreen/chat_screen.dart';
+import 'package:witwire/screens/showUser/showUser.dart';
 
-class UserPrev extends StatelessWidget {
-  QueryDocumentSnapshot<Object?> user;
-  late String username;
-  late String photoURL;
-  late String description;
-  late String uid;
-  UserPrev({super.key, required this.user}) {
+class UserPrevOnClickProfile extends StatelessWidget {
+  final QueryDocumentSnapshot<Object?> user;
+  late final String username;
+  late final String photoURL;
+  late final String description;
+  late final String uid;
+  UserPrevOnClickProfile({super.key, required this.user}) {
     username = user["username"];
     photoURL = user["photoURL"];
     description = user["description"];
@@ -19,10 +17,8 @@ class UserPrev extends StatelessWidget {
   }
 
   void goToProfile() async {
-    UserData user = UserData(uid: uid);
-    await user.setUser();
     navigatorKey.currentState!.pushReplacement(MaterialPageRoute(
-      builder: (context) => ChatScreen(user: user),
+      builder: (context) => ShowUser(user: user),
     ));
   }
 

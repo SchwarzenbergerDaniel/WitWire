@@ -22,13 +22,21 @@ class AuthMethods {
         DateMethods.getKeyByDate(now.add(const Duration(days: -1))));
 
     Timestamp lastUpload = UserData.currentLoggedInUser!.lastupload;
+    Timestamp nowStamp = Timestamp.now();
 
-    bool isBetweenYesterdayAndToday =
-        lastUpload.compareTo(yesterday) >= 0 && lastUpload.compareTo(today) < 0;
-    bool isBetweenTodayAndTomorrow =
-        lastUpload.compareTo(today) >= 0 && lastUpload.compareTo(tomorrow) < 0;
+    if (lastUpload.compareTo(today) > 0) {
+      //Upload war heute schon.
+      return true;
+    }
 
-    return isBetweenYesterdayAndToday || isBetweenTodayAndTomorrow;
+    if (today.compareTo(nowStamp) > 0) {
+      //Upload heute zu späteren Zeitpunkt
+      if (lastUpload.compareTo(yesterday) > 0) {
+        //Schauen ob gestern hochgeladen wurde
+        return true;
+      }
+    }
+    return false;
   }
 
   static Future<String> createNewUser(

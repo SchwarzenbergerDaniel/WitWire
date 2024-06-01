@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:witwire/main.dart';
 import 'package:witwire/screens/create/userupload/userupload_screen.dart';
+import 'package:witwire/utils/colors.dart';
 
 class UploadImageSelectScreen extends StatefulWidget {
   const UploadImageSelectScreen({super.key});
@@ -24,6 +25,7 @@ class UploadImageSelectScreenState extends State<UploadImageSelectScreen> {
     }
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: secondaryColor,
         centerTitle: true,
         title: Image.asset('assets/appbar-image.png',
             fit: BoxFit.fill, width: imageWidth),

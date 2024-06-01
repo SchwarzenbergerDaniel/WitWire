@@ -7,10 +7,13 @@ class PostMethods {
     List<String> hashTags = _getHashTags(description);
 
     DateTime today = DateTime.now();
+
     CollectionReference postsCollection =
         FirebaseFirestore.instance.collection("posts");
+
     DateTime uploadDay = isToday ? today : today.add(const Duration(days: -1));
-    postsCollection.add({
+
+    DocumentReference newPostRef = await postsCollection.add({
       'comments': [],
       'date': today,
       'day': uploadDay,
@@ -24,6 +27,9 @@ class PostMethods {
       'profilePictureURL': UserData.currentLoggedInUser!.photoURL
     });
 
+    String postID = newPostRef.id;
+
+    newPostRef.set({'postid': postID}, SetOptions(merge: true));
     //User updaten
     FirebaseFirestore.instance.collection("users").doc(uid).set({
       "lastupload": DateTime.now(),

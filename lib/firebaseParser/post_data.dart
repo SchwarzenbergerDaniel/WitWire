@@ -50,8 +50,41 @@ class PostData {
     });
   }
 
-  static Future<PostData> create(
-      {required String postID, required bool canBeLiked}) async {
+  static bool canBeModified(Timestamp uploadTime) {
+    //Ist day gleich heute?
+    DateTime today = DateTime.now();
+    DateTime uploadAsDateTime = uploadTime.toDate();
+    return today.year == uploadAsDateTime.year &&
+        today.month == uploadAsDateTime.month &&
+        today.day == uploadAsDateTime.day;
+  }
+
+  static PostData getPostDataFromSnapshot(QueryDocumentSnapshot<Object?> snap) {
+    Map<String, dynamic> votes = snap["votes"] ?? {};
+
+    String currentUserUID = UserData.currentLoggedInUser!.uid;
+    int currentUserLike = votes.containsKey(currentUserUID) &&
+            votes[currentUserUID] == true
+        ? 1
+        : votes.containsKey(currentUserUID) && votes[currentUserUID] == false
+            ? -1
+            : 0;
+    print(snap["imageURL"]);
+    return PostData._(
+      postID: snap["postid"],
+      canBeLiked: canBeModified(snap["day"]),
+      uid: snap["uid"],
+      username: snap["username"],
+      likes: snap["likes"],
+      imagePath: snap["imageURL"],
+      description: snap["description"],
+      publishedTime: (snap["date"] as Timestamp).toDate(),
+      hashtags: List<String>.from(snap["hashtags"]),
+      currentUserLike: currentUserLike,
+    );
+  }
+
+  static Future<PostData> create({required String postID}) async {
     DocumentSnapshot snap =
         await FirebaseFirestore.instance.collection('posts').doc(postID).get();
     Map<String, dynamic> asMap = (snap.data() as Map<String, dynamic>);
@@ -75,7 +108,7 @@ class PostData {
 
     return PostData._(
       postID: postID,
-      canBeLiked: canBeLiked,
+      canBeLiked: canBeModified(asMap["day"]),
       uid: uid,
       username: username,
       likes: likes,
