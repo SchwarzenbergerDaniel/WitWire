@@ -58,7 +58,8 @@ class AuthMethods {
         'followers': [],
         'following': [],
         'photoURL': url,
-        'password': password
+        'password': password,
+        'usernamelength': username.length
       });
 
       return "success";

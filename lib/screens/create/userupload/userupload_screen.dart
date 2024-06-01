@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:witwire/date_methods.dart';
 import 'package:witwire/firebaseParser/user_data.dart';
 import 'package:witwire/logik/image_storage_methods.dart';
 import 'package:witwire/logik/post_methods.dart';
@@ -17,16 +18,14 @@ class UserUploadScreen extends StatefulWidget {
 
 class _UserUploadScreenState extends State<UserUploadScreen> {
   void _upload() async {
-    setState(() {
-      isUploading = true;
-    });
-    isUploading = true;
     String photoURL = await ImageStorageMethods.uploadPostPicture(widget.image);
     String uid = UserData.currentLoggedInUser!.uid;
     String username = UserData.currentLoggedInUser!.username;
     String description = _beschreibungscontroller.text;
 
-    PostMethods.uploadPost(photoURL, uid, username, description);
+    DateMethods.getTimeStampByKey(DateMethods.getKeyByDate(DateTime.now()))
+        .then((value) => PostMethods.uploadPost(photoURL, uid, username,
+            description, value.toDate().isBefore(DateTime.now())));
 
     navigatorKey.currentState!.pushAndRemoveUntil(
         //Keine möglichkeit geben zurück zu gehen.

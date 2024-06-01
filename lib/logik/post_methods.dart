@@ -2,16 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:witwire/firebaseParser/user_data.dart';
 
 class PostMethods {
-  static void uploadPost(
-      String photoURL, String uid, String username, String description) async {
+  static void uploadPost(String photoURL, String uid, String username,
+      String description, bool isToday) async {
     List<String> hashTags = _getHashTags(description);
 
     DateTime today = DateTime.now();
     CollectionReference postsCollection =
         FirebaseFirestore.instance.collection("posts");
+    DateTime uploadDay = isToday ? today : today.add(const Duration(days: -1));
     postsCollection.add({
       'comments': [],
       'date': today,
+      'day': uploadDay,
       'description': description,
       'hashtags': hashTags,
       'imageURL': photoURL,

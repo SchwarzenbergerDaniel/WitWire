@@ -31,7 +31,6 @@ class UserData {
     DocumentSnapshot snap =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
     Map<String, dynamic> asMap = (snap.data() as Map<String, dynamic>);
-
     email = asMap["email"];
     username = asMap["username"];
     bio = asMap["description"];

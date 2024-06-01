@@ -10,7 +10,7 @@ import 'package:witwire/widgets/bottomnavbar/bottomnavbaritems.dart';
 
 // ignore: must_be_immutable
 class BottomNavBar extends StatelessWidget {
-  final int _currIndex;
+  late int _currIndex;
   late BuildContext context;
 
   BottomNavBar(this._currIndex, {super.key});
