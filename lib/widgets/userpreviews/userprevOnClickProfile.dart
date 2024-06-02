@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:witwire/main.dart';
-import 'package:witwire/screens/showUser/showUser.dart';
+import 'package:witwire/screens/showUser/show_user.dart';
 
 class UserPrevOnClickProfile extends StatelessWidget {
   final QueryDocumentSnapshot<Object?> user;

@@ -1,17 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:witwire/firebaseParser/user_data.dart';
+import 'package:witwire/main.dart';
+import 'package:witwire/screens/myprofile/myprofile_screen.dart';
 import 'package:witwire/utils/colors.dart';
 import 'package:witwire/widgets/bottomnavbar/bottomnavbar.dart';
 import 'package:witwire/widgets/postlist/postListViewBuilder.dart';
 
 class ShowUser extends StatelessWidget {
-  const ShowUser({required this.user, super.key});
+  bool _isMyProfile = false;
+  ShowUser({required this.user, super.key}) {
+    if (user["uid"] == UserData.currentLoggedInUser!.uid) {
+      _isMyProfile = true;
+    }
+  }
 
   final QueryDocumentSnapshot<Object?> user;
 
   @override
   Widget build(BuildContext context) {
-    print("BUILD SHOW USER");
+    if (_isMyProfile) {
+      return const MyProfileScreen();
+    }
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -39,11 +49,10 @@ class ShowUser extends StatelessWidget {
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getStream() {
-    //TODO: ERROR AT WHERE
     return FirebaseFirestore.instance
         .collection("posts")
-        // .where("uid", isEqualTo: user["uid"])
         .orderBy("date", descending: true)
+        .where("uid", isEqualTo: user["uid"])
         .snapshots();
   }
 }

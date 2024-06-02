@@ -16,8 +16,6 @@ class AuthMethods {
     DateTime now = DateTime.now();
     Timestamp today =
         await DateMethods.getTimeStampByKey(DateMethods.getKeyByDate(now));
-    Timestamp tomorrow = await DateMethods.getTimeStampByKey(
-        DateMethods.getKeyByDate(now.add(const Duration(days: 1))));
     Timestamp yesterday = await DateMethods.getTimeStampByKey(
         DateMethods.getKeyByDate(now.add(const Duration(days: -1))));
 

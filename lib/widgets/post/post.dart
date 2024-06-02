@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:witwire/firebaseParser/post_data.dart';
 import 'package:witwire/firebaseParser/user_data.dart';
-import 'package:witwire/utils/colors.dart';
 
 // ignore: must_be_immutable
 class Post extends StatefulWidget {

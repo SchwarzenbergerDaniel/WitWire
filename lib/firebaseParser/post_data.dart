@@ -69,7 +69,6 @@ class PostData {
         : votes.containsKey(currentUserUID) && votes[currentUserUID] == false
             ? -1
             : 0;
-    print(snap["imageURL"]);
     return PostData._(
       postID: snap["postid"],
       canBeLiked: canBeModified(snap["day"]),
