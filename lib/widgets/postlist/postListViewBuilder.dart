@@ -10,24 +10,26 @@ class PostListViewBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: postStream,
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        final posts = snapshot.data!.docs;
-        return ListView.builder(
-          itemCount: posts.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Post(
-                post: PostData.getPostDataFromSnapshot(posts[index]),
-              ),
-            );
-          },
-        );
-      },
+    return Flexible(
+      child: StreamBuilder<QuerySnapshot>(
+        stream: postStream,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          final posts = snapshot.data!.docs;
+          return ListView.builder(
+            itemCount: posts.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Post(
+                  post: PostData.getPostDataFromSnapshot(posts[index]),
+                ),
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

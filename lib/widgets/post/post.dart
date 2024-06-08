@@ -1,18 +1,34 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:witwire/firebaseParser/post_data.dart';
 import 'package:witwire/firebaseParser/user_data.dart';
+import 'package:witwire/main.dart';
+import 'package:witwire/screens/showUser/show_user.dart';
 
 // ignore: must_be_immutable
 class Post extends StatefulWidget {
   final PostData _post;
 
-  Post({required PostData post, super.key}) : _post = post;
+  const Post({required PostData post, super.key}) : _post = post;
 
   @override
   State<Post> createState() => _PostState();
 }
 
 class _PostState extends State<Post> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void _goToProfile() async {
+    QueryDocumentSnapshot<Object?> a =
+        await UserData.getUserByUID(widget._post.uid);
+    navigatorKey.currentState!.pushReplacement(MaterialPageRoute(
+      builder: (context) => ShowUser(user: a),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -25,22 +41,27 @@ class _PostState extends State<Post> {
               CircleAvatar(
                 radius: 24,
                 backgroundImage: Image.network(
-                  UserData.currentLoggedInUser!.photoURL,
+                  //TODO: Richtiges Bild
+                  widget._post.profilePictureURL,
                   fit: BoxFit.cover,
                 ).image,
               ),
               const SizedBox(width: 10),
               Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(
-                    widget._post.username,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  InkWell(
+                    onTap: () => _goToProfile(),
+                    child: Text(
+                      widget._post.username,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
                   Text(
                     widget._post.publishedTime.toString(),
                   ),
                 ],
-              )
+              ),
             ],
           ),
 

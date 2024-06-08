@@ -12,19 +12,19 @@ class PostData {
   late DateTime publishedTime;
   late List<String> hashtags;
   late int currentUserLike;
-
-  PostData._({
-    required this.postID,
-    required this.canBeLiked,
-    required this.uid,
-    required this.username,
-    required this.likes,
-    required this.imagePath,
-    required this.description,
-    required this.publishedTime,
-    required this.hashtags,
-    required this.currentUserLike,
-  });
+  late String profilePictureURL;
+  PostData._(
+      {required this.postID,
+      required this.canBeLiked,
+      required this.uid,
+      required this.username,
+      required this.likes,
+      required this.imagePath,
+      required this.description,
+      required this.publishedTime,
+      required this.hashtags,
+      required this.currentUserLike,
+      required this.profilePictureURL});
   void setCurrentUserLike(int newstatus) async {
     if (newstatus == currentUserLike) return;
 
@@ -70,17 +70,17 @@ class PostData {
             ? -1
             : 0;
     return PostData._(
-      postID: snap["postid"],
-      canBeLiked: canBeModified(snap["day"]),
-      uid: snap["uid"],
-      username: snap["username"],
-      likes: snap["likes"],
-      imagePath: snap["imageURL"],
-      description: snap["description"],
-      publishedTime: (snap["date"] as Timestamp).toDate(),
-      hashtags: List<String>.from(snap["hashtags"]),
-      currentUserLike: currentUserLike,
-    );
+        postID: snap["postid"],
+        canBeLiked: canBeModified(snap["day"]),
+        uid: snap["uid"],
+        username: snap["username"],
+        likes: snap["likes"],
+        imagePath: snap["imageURL"],
+        description: snap["description"],
+        publishedTime: (snap["date"] as Timestamp).toDate(),
+        hashtags: List<String>.from(snap["hashtags"]),
+        currentUserLike: currentUserLike,
+        profilePictureURL: snap["profilePictureURL"]);
   }
 
   static Future<PostData> create({required String postID}) async {
@@ -93,6 +93,7 @@ class PostData {
     int likes = asMap["likes"];
     String imagePath = asMap["imageURL"];
     String description = asMap["description"];
+    String profilePictureURL = asMap["profilePictureURL"];
     DateTime publishedTime = (asMap["date"] as Timestamp).toDate();
     List<String> hashtags = List<String>.from(asMap["hashtags"]);
     Map<String, dynamic> votes = asMap["votes"] ?? {};
@@ -106,16 +107,16 @@ class PostData {
             : 0;
 
     return PostData._(
-      postID: postID,
-      canBeLiked: canBeModified(asMap["day"]),
-      uid: uid,
-      username: username,
-      likes: likes,
-      imagePath: imagePath,
-      description: description,
-      publishedTime: publishedTime,
-      hashtags: hashtags,
-      currentUserLike: currentUserLike,
-    );
+        postID: postID,
+        canBeLiked: canBeModified(asMap["day"]),
+        uid: uid,
+        username: username,
+        likes: likes,
+        imagePath: imagePath,
+        description: description,
+        publishedTime: publishedTime,
+        hashtags: hashtags,
+        currentUserLike: currentUserLike,
+        profilePictureURL: profilePictureURL);
   }
 }

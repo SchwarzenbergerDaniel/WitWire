@@ -12,6 +12,16 @@ class UserData {
     return true;
   }
 
+  static Future<QueryDocumentSnapshot<Object?>> getUserByUID(String uid) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .where('uid', isEqualTo: uid)
+        .limit(1)
+        .get();
+
+    return querySnapshot.docs.first;
+  }
+
   late String email;
   late String uid;
   String username = "";
@@ -39,4 +49,12 @@ class UserData {
     lastupload = asMap["lastupload"];
     photoURL = asMap["photoURL"];
   }
+
+  bool isFollowing(String uid) {
+    return followers.contains(uid);
+  }
+
+  void followUser(String uid) {}
+
+  void unfollowUser(String uid) {}
 }
