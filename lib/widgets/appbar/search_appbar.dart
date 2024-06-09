@@ -5,9 +5,13 @@ class SearchScreenAppBar extends StatelessWidget
     implements PreferredSizeWidget {
   TextEditingController controller = TextEditingController();
   Function(String newInput)? onchanged;
+  String hintText;
 
   SearchScreenAppBar(
-      {required this.controller, required this.onchanged, super.key});
+      {required this.controller,
+      required this.onchanged,
+      this.hintText = "Search...",
+      super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +38,8 @@ class SearchScreenAppBar extends StatelessWidget
                   child: TextField(
                     controller: controller,
                     onChanged: (text) => onchanged!(text),
-                    decoration: const InputDecoration(
-                      hintText: 'Search...',
+                    decoration: InputDecoration(
+                      hintText: hintText,
                       border: InputBorder.none,
                     ),
                   ),

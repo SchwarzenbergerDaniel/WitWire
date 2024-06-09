@@ -3,7 +3,6 @@ import 'package:witwire/firebaseParser/user_data.dart';
 
 class PostData {
   late String postID;
-  late bool canBeLiked;
   late String uid;
   late String username;
   late int likes;
@@ -15,7 +14,6 @@ class PostData {
   late String profilePictureURL;
   PostData._(
       {required this.postID,
-      required this.canBeLiked,
       required this.uid,
       required this.username,
       required this.likes,
@@ -33,30 +31,22 @@ class PostData {
 
     DocumentReference postRef =
         FirebaseFirestore.instance.collection("posts").doc(postID);
+    String currUserID = UserData.currentLoggedInUser!.uid;
     if (newstatus == 0) {
       postRef.update({
-        'votes.$uid': FieldValue.delete(),
+        'votes.$currUserID': FieldValue.delete(),
       });
     } else {
       bool isLike = newstatus == 1;
       postRef.update({
-        'votes.$uid': isLike,
+        'votes.$currUserID': isLike,
       });
     }
-    currentUserLike = newstatus;
 
+    currentUserLike = newstatus;
     postRef.update({
       'likes': FieldValue.increment(diff),
     });
-  }
-
-  static bool canBeModified(Timestamp uploadTime) {
-    //Ist day gleich heute?
-    DateTime today = DateTime.now();
-    DateTime uploadAsDateTime = uploadTime.toDate();
-    return today.year == uploadAsDateTime.year &&
-        today.month == uploadAsDateTime.month &&
-        today.day == uploadAsDateTime.day;
   }
 
   static PostData getPostDataFromSnapshot(QueryDocumentSnapshot<Object?> snap) {
@@ -71,7 +61,6 @@ class PostData {
             : 0;
     return PostData._(
         postID: snap["postid"],
-        canBeLiked: canBeModified(snap["day"]),
         uid: snap["uid"],
         username: snap["username"],
         likes: snap["likes"],
@@ -108,7 +97,6 @@ class PostData {
 
     return PostData._(
         postID: postID,
-        canBeLiked: canBeModified(asMap["day"]),
         uid: uid,
         username: username,
         likes: likes,

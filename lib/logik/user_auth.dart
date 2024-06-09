@@ -65,7 +65,8 @@ class AuthMethods {
         'following': [],
         'photoURL': url,
         'password': password,
-        'usernamelength': username.length
+        'usernamelength': username.length,
+        'lastupload': DateTime.now().add(const Duration(days: -2))
       });
 
       return "success";

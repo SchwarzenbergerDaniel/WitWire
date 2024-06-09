@@ -114,7 +114,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           borderRadius: BorderRadius.all(Radius.circular(4)))),
                   child: !isloading
                       ? const Text(
-                          style: TextStyle(color: loginRegisterButtonTextColor),
+                          style: TextStyle(
+                              color: loginRegisterButtonTextColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16),
                           "Log in")
                       : const Center(
                           child: CircularProgressIndicator(),

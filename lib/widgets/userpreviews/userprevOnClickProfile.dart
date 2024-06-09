@@ -9,6 +9,7 @@ class UserPrevOnClickProfile extends StatelessWidget {
   late final String photoURL;
   late final String description;
   late final String uid;
+
   UserPrevOnClickProfile({super.key, required this.user}) {
     username = user["username"];
     photoURL = user["photoURL"];

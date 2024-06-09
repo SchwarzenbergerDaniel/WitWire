@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -27,8 +29,8 @@ class UserData {
   String username = "";
   String bio = "";
   late String photoURL;
-  late List followers;
-  late List following;
+  late HashSet<String> followers;
+  late HashSet<String> following;
   late Timestamp lastupload;
 
   UserData({required this.uid, bool? dontSet}) {
@@ -41,20 +43,63 @@ class UserData {
     DocumentSnapshot snap =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
     Map<String, dynamic> asMap = (snap.data() as Map<String, dynamic>);
+    print("MAP: " + asMap.toString());
     email = asMap["email"];
     username = asMap["username"];
     bio = asMap["description"];
-    followers = asMap["followers"];
-    following = asMap["following"];
+    followers = HashSet.from(asMap["followers"]);
+    following = HashSet.from(asMap["following"]);
     lastupload = asMap["lastupload"];
     photoURL = asMap["photoURL"];
   }
 
   bool isFollowing(String uid) {
-    return followers.contains(uid);
+    return following.contains(uid);
   }
 
-  void followUser(String uid) {}
+  void _followOtherUserChange(String otherUserID, bool isFollowing) {
+    //Update currentUser following
+    DocumentReference userRef =
+        FirebaseFirestore.instance.collection("users").doc(uid);
 
-  void unfollowUser(String uid) {}
+    if (isFollowing) {
+      userRef.update({
+        'following': FieldValue.arrayUnion([otherUserID])
+      });
+      following.add(otherUserID);
+    } else {
+      userRef.update({
+        'following': FieldValue.arrayRemove([otherUserID])
+      });
+      following.remove(otherUserID);
+    }
+    _otherUserFollowedChanged(otherUserID, isFollowing);
+  }
+
+  void _otherUserFollowedChanged(String otherUID, bool isFollowing) {
+    DocumentReference userRef =
+        FirebaseFirestore.instance.collection("users").doc(otherUID);
+
+    if (isFollowing) {
+      userRef.update({
+        'followers': FieldValue.arrayUnion([uid])
+      });
+    } else {
+      userRef.update({
+        'followers': FieldValue.arrayRemove([uid])
+      });
+    }
+  }
+
+  void followUser(String uid) async {
+    if (following.contains(uid)) return;
+
+    _followOtherUserChange(uid, true);
+  }
+
+  void unfollowUser(String uid) {
+    if (!following.contains(uid)) return;
+
+    _followOtherUserChange(uid, false);
+  }
 }

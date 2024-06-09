@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:witwire/firebaseParser/user_data.dart';
 import 'package:witwire/utils/colors.dart';
 import 'package:witwire/widgets/bottomnavbar/bottomnavbar.dart';
-import 'package:witwire/widgets/postlist/postListViewBuilder.dart';
+import 'package:witwire/widgets/postlist/post_listview_builder.dart';
 
 class MyProfileScreen extends StatefulWidget {
   const MyProfileScreen({super.key});
@@ -13,6 +13,7 @@ class MyProfileScreen extends StatefulWidget {
 }
 
 class _MyProfileScreenState extends State<MyProfileScreen> {
+  final ScrollController _controller = ScrollController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,6 +37,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         ),
       ),
       body: PostListViewBuilder(
+        controller: _controller,
         postStream: getStream(),
       ),
       bottomNavigationBar: BottomNavBar(4),

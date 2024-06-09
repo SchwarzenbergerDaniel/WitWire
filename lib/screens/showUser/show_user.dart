@@ -1,69 +1,179 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:witwire/firebaseParser/user_data.dart';
+import 'package:witwire/main.dart';
+import 'package:witwire/screens/chat/chatscreen/chat_screen.dart';
 import 'package:witwire/screens/myprofile/myprofile_screen.dart';
+import 'package:witwire/screens/userlist_displayer/userlist_displayer.dart';
 import 'package:witwire/utils/colors.dart';
 import 'package:witwire/widgets/bottomnavbar/bottomnavbar.dart';
-import 'package:witwire/widgets/postlist/postListViewBuilder.dart';
+import 'package:witwire/widgets/postlist/post_listview_builder.dart';
 
 // ignore: must_be_immutable
-class ShowUser extends StatelessWidget {
+class ShowUser extends StatefulWidget {
   bool _isMyProfile = false;
+  late bool _isFollowed;
+  UserData? _user;
+
   ShowUser({required this.user, super.key}) {
     if (user["uid"] == UserData.currentLoggedInUser!.uid) {
       _isMyProfile = true;
     }
+    _isFollowed = UserData.currentLoggedInUser!.isFollowing(user["uid"]);
+    _user = UserData(uid: user["uid"]);
   }
 
   final QueryDocumentSnapshot<Object?> user;
 
   @override
+  State<ShowUser> createState() => _ShowUserState();
+}
+
+class _ShowUserState extends State<ShowUser> {
+  Widget _buildGoToChatButton() {
+    return SizedBox(
+      width: 200,
+      child: ElevatedButton(
+          style: const ButtonStyle(
+            backgroundColor: MaterialStatePropertyAll(tuerkiscolor),
+            foregroundColor: MaterialStatePropertyAll(Colors.black),
+          ),
+          onPressed: () => {
+                if (widget._user != null)
+                  {
+                    navigatorKey.currentState!.push(
+                      MaterialPageRoute(
+                        builder: (context) => ChatScreen(user: widget._user!),
+                      ),
+                    ),
+                  }
+              },
+          child: const Text("Nachricht")),
+    );
+  }
+
+  Widget _buildFollowButton() {
+    return SizedBox(
+      width: 200,
+      child: TextButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStatePropertyAll(
+              widget._isFollowed ? Colors.grey : tuerkiscolor),
+          foregroundColor: const MaterialStatePropertyAll(Colors.black),
+        ),
+        onPressed: widget._isFollowed ? _unfollow : _follow,
+        child: widget._isFollowed
+            ? const Text("Deabonniere")
+            : const Text("Abonniere"),
+      ),
+    );
+  }
+
+  void _follow() {
+    UserData.currentLoggedInUser!.followUser(widget._user!.uid);
+    setState(() {
+      widget._isFollowed = true;
+    });
+  }
+
+  void _unfollow() {
+    UserData.currentLoggedInUser!.unfollowUser(widget._user!.uid);
+
+    setState(() {
+      widget._isFollowed = false;
+    });
+  }
+
+  final ScrollController _controller = ScrollController();
+
+  @override
   Widget build(BuildContext context) {
-    if (_isMyProfile) {
+    if (widget._isMyProfile) {
       return const MyProfileScreen();
     }
     return Scaffold(
       appBar: _buildAppBar(),
-      body: Column(
-        children: [
-          const SizedBox(height: 40),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CircleAvatar(
-                radius: 48,
-                backgroundImage: Image.network(user["photoURL"]).image,
-              ),
-              const SizedBox(width: 50),
-              Column(
-                children: [
-                  Text(
-                    user["followers"].length.toString(),
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+      body: SingleChildScrollView(
+        controller: _controller,
+        child: Column(
+          children: [
+            const SizedBox(height: 40),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(children: [
+                  const SizedBox(height: 10),
+                  CircleAvatar(
+                    radius: 48,
+                    backgroundImage:
+                        Image.network(widget.user["photoURL"]).image,
                   ),
-                  const Text(
-                    "Abonnenten",
-                  ),
-                ],
-              ),
-              const SizedBox(width: 50),
-              Column(
-                children: [
-                  Text(
-                    user["following"].length.toString(),
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  const Text(
-                    "Abonniert",
-                  ),
-                ],
-              ),
-            ],
-          ),
-          PostListViewBuilder(
-            postStream: getStream(),
-          ),
-        ],
+                ]),
+                const SizedBox(width: 25),
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        InkWell(
+                          onTap: () => navigatorKey.currentState!.push(
+                            MaterialPageRoute(
+                              builder: (context) => UserListScreen(
+                                  uids: widget.user["followers"],
+                                  title: "Abonniert"),
+                            ),
+                          ),
+                          child: Column(
+                            children: [
+                              Text(
+                                widget.user["followers"].length.toString(),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const Text(
+                                "Abonnenten",
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 25),
+                        InkWell(
+                          onTap: () => navigatorKey.currentState!.push(
+                            MaterialPageRoute(
+                              builder: (context) => UserListScreen(
+                                  uids: widget.user["following"],
+                                  title: "Abonnenten"),
+                            ),
+                          ),
+                          child: Column(
+                            children: [
+                              Text(
+                                widget.user["following"].length.toString(),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const Text(
+                                "Abonniert",
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    _buildFollowButton(),
+                    const SizedBox(height: 10),
+                    _buildGoToChatButton(),
+                  ],
+                ),
+              ],
+            ),
+            PostListViewBuilder(
+              controller: _controller,
+              postStream: getStream(),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: BottomNavBar(1),
     );
@@ -73,7 +183,7 @@ class ShowUser extends StatelessWidget {
     return FirebaseFirestore.instance
         .collection("posts")
         .orderBy("date", descending: true)
-        .where("uid", isEqualTo: user["uid"])
+        .where("uid", isEqualTo: widget.user["uid"])
         .snapshots();
   }
 
@@ -87,12 +197,13 @@ class ShowUser extends StatelessWidget {
           CircleAvatar(
             radius: 24,
             backgroundImage: Image.network(
-              user["photoURL"],
+              widget.user["photoURL"],
               fit: BoxFit.cover,
             ).image,
           ),
           const SizedBox(width: 20),
-          Text(user["username"], style: const TextStyle(color: mainColor)),
+          Text(widget.user["username"],
+              style: const TextStyle(color: mainColor)),
         ],
       ),
     );
