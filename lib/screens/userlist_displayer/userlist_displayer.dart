@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:witwire/firebaseParser/user_data.dart';
-import 'package:witwire/utils/colors.dart';
 import 'package:witwire/widgets/bottomnavbar/bottomnavbar.dart';
 import 'package:witwire/widgets/userpreviews/userprevOnClickProfile.dart';
 
