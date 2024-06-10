@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:witwire/firebaseParser/user_data.dart';
 import 'package:witwire/firebase_options.dart';
+import 'package:witwire/logik/queryhelper.dart';
 import 'package:witwire/logik/user_auth.dart';
 import 'package:witwire/providers/newdayprovider.dart';
 import 'package:witwire/screens/create/create_screen.dart';
@@ -17,7 +18,7 @@ void main() async {
   tz.initializeTimeZones();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
+  QueryHelper.initQueryHelper();
   runApp(const MyApp());
 }
 

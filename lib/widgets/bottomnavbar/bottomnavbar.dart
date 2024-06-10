@@ -29,7 +29,7 @@ class BottomNavBar extends StatelessWidget {
         newPage = CreateScreen(userNeedsToUpload: false);
         break;
       case 3:
-        newPage = const TopPostsScreen();
+        newPage = const TodayTopFeed();
         break;
       case 4:
         newPage = const MyProfileScreen();

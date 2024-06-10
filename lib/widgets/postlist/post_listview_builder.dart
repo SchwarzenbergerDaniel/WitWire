@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:witwire/firebaseParser/post_data.dart';
 import 'package:witwire/widgets/post/post.dart';
+import 'package:witwire/widgets/postlist/nodata_widget.dart';
 
 // ignore: must_be_immutable
 class PostListViewBuilder extends StatelessWidget {
@@ -17,9 +18,11 @@ class PostListViewBuilder extends StatelessWidget {
       stream: postStream,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator());
+          return const NoDataWidget();
         }
         final posts = snapshot.data!.docs;
+        if (posts.isEmpty) return const NoDataWidget();
+
         return ListView.builder(
           itemCount: posts.length,
           shrinkWrap: true,

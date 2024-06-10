@@ -63,34 +63,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           username: _usernameController.text,
           beschreibung: _beschreibungController.text,
           file: _image!);
-
-      response = await AuthMethods.createNewUser(
-          email: "0" + _emailController.text,
-          password: _passwordController.text,
-          username: _usernameController.text,
-          beschreibung: _beschreibungController.text,
-          file: _image!);
-
-      response = await AuthMethods.createNewUser(
-          email: "1" + _emailController.text,
-          password: _passwordController.text,
-          username: _usernameController.text,
-          beschreibung: _beschreibungController.text,
-          file: _image!);
-
-      response = await AuthMethods.createNewUser(
-          email: "2" + _emailController.text,
-          password: _passwordController.text,
-          username: _usernameController.text,
-          beschreibung: _beschreibungController.text,
-          file: _image!);
-
-      response = await AuthMethods.createNewUser(
-          email: "3" + _emailController.text,
-          password: _passwordController.text,
-          username: _usernameController.text,
-          beschreibung: _beschreibungController.text,
-          file: _image!);
     } else {
       response = "Wähle ein Bild!";
     }

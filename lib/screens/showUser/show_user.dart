@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:witwire/firebaseParser/user_data.dart';
 import 'package:witwire/main.dart';
 import 'package:witwire/screens/chat/chatscreen/chat_screen.dart';

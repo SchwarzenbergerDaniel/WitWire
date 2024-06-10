@@ -16,7 +16,7 @@ class PostMethods {
     DocumentReference newPostRef = await postsCollection.add({
       'comments': [],
       'date': today,
-      'day': uploadDay,
+      'day': DateTime(uploadDay.year, uploadDay.month, uploadDay.day),
       'description': description,
       'hashtags': hashTags,
       'imageURL': photoURL,

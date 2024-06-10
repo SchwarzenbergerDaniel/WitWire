@@ -18,7 +18,7 @@ class _CreateScreenState extends State<CreateScreen> {
   @override
   Widget build(BuildContext context) {
     if (widget.userNeedsToUpload) {
-      return const UploadImageSelectScreen();
+      return UploadImageSelectScreen();
     }
     return const ShowNextUploadScreen();
   }

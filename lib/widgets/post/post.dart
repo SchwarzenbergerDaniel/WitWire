@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:witwire/firebaseParser/post_data.dart';
 import 'package:witwire/firebaseParser/user_data.dart';
 import 'package:witwire/main.dart';
+import 'package:witwire/screens/search/search_screen.dart';
 import 'package:witwire/screens/showUser/show_user.dart';
 import 'package:witwire/utils/colors.dart';
 
@@ -47,40 +49,6 @@ class _PostState extends State<Post> {
   }
 
   bool isExpanded = false;
-
-  Widget buildDescriptionWidget() {
-    final isLongText = widget._post.description.length > 100;
-
-    if (!isLongText) {
-      return Text(
-        widget._post.description,
-        style: const TextStyle(fontWeight: FontWeight.bold),
-      );
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          isExpanded
-              ? widget._post.description
-              : '${widget._post.description.substring(0, 100)}...',
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        GestureDetector(
-          onTap: () {
-            setState(() {
-              isExpanded = !isExpanded;
-            });
-          },
-          child: Text(
-            isExpanded ? 'Weniger' : 'Mehr',
-            style: const TextStyle(color: Colors.blue),
-          ),
-        ),
-      ],
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -177,6 +145,87 @@ class _PostState extends State<Post> {
             ],
           )
         ],
+      ),
+    );
+  }
+
+  Widget buildDescriptionWidget() {
+    final isLongText = widget._post.description.length > 100;
+
+    if (!isLongText) {
+      return _buildRichText(widget._post.description);
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildRichText(
+          isExpanded
+              ? widget._post.description
+              : '${widget._post.description.substring(0, 100)}...',
+        ),
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              isExpanded = !isExpanded;
+            });
+          },
+          child: Text(
+            isExpanded ? 'Weniger' : 'Mehr',
+            style: const TextStyle(color: Colors.blue),
+          ),
+        ),
+      ],
+    );
+  }
+
+  RichText _buildRichText(String text) {
+    final List<InlineSpan> children = [];
+    final RegExp hashtagRegExp = RegExp(r'(#[a-zA-Z0-9_]+)');
+    final matches = hashtagRegExp.allMatches(text);
+
+    int lastMatchEnd = 0;
+    for (final match in matches) {
+      if (match.start > lastMatchEnd) {
+        children.add(TextSpan(
+          text: text.substring(lastMatchEnd, match.start),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ));
+      }
+      children.add(
+        TextSpan(
+          text: match.group(0),
+          style: const TextStyle(
+            color: Colors.blue,
+            fontWeight: FontWeight.bold,
+          ),
+          recognizer: TapGestureRecognizer()
+            ..onTap = () {
+              searchHashTag(match.group(0)!);
+            },
+        ),
+      );
+      lastMatchEnd = match.end;
+    }
+
+    if (lastMatchEnd < text.length) {
+      children.add(TextSpan(
+        text: text.substring(lastMatchEnd),
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+      ));
+    }
+
+    return RichText(
+      text: TextSpan(children: children),
+    );
+  }
+
+  void searchHashTag(String word) {
+    navigatorKey.currentState!.pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => SearchScreen(
+          startSearch: word,
+        ),
       ),
     );
   }

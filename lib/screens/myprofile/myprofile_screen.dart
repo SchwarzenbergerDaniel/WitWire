@@ -47,8 +47,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   Stream<QuerySnapshot<Map<String, dynamic>>> getStream() {
     return FirebaseFirestore.instance
         .collection("posts")
-        .orderBy("date", descending: true)
         .where("uid", isEqualTo: UserData.currentLoggedInUser!.uid)
+        .orderBy("date", descending: true)
         .snapshots();
   }
 }

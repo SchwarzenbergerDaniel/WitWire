@@ -12,7 +12,7 @@ class PostData {
   late List<String> hashtags;
   late int currentUserLike;
   late String profilePictureURL;
-  PostData._(
+  PostData(
       {required this.postID,
       required this.uid,
       required this.username,
@@ -59,7 +59,7 @@ class PostData {
         : votes.containsKey(currentUserUID) && votes[currentUserUID] == false
             ? -1
             : 0;
-    return PostData._(
+    return PostData(
         postID: snap["postid"],
         uid: snap["uid"],
         username: snap["username"],
@@ -95,7 +95,7 @@ class PostData {
             ? -1
             : 0;
 
-    return PostData._(
+    return PostData(
         postID: postID,
         uid: uid,
         username: username,
