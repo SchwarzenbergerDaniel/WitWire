@@ -182,7 +182,6 @@ class _ShowUserState extends State<ShowUser> {
   Query<Map<String, dynamic>> getStream() {
     return FirebaseFirestore.instance
         .collection("posts")
-        .orderBy("date", descending: true)
         .where("uid", isEqualTo: widget.user["uid"]);
   }
 

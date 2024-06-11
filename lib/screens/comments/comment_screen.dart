@@ -104,7 +104,6 @@ class _CommentsState extends State<Comments> {
 
   void sendMessage() {
     String message = _controller.text;
-    print("SEND:" + message);
     if (message.isEmpty) return;
 
     //In die Datenbank laden.
@@ -118,9 +117,14 @@ class _CommentsState extends State<Comments> {
       'photoURL': UserData.currentLoggedInUser!.photoURL,
       'time': DateTime.now()
     });
+
+    FirebaseFirestore.instance
+        .collection('posts')
+        .doc(widget.postID)
+        .update({'commentCount': FieldValue.increment(1)});
+
     setState(() {
       myComments.add(message);
-      print(myComments);
     });
   }
 }

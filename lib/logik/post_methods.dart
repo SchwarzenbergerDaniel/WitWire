@@ -24,7 +24,8 @@ class PostMethods {
       'uid': uid,
       'votes': {uid: true},
       'username': UserData.currentLoggedInUser!.username,
-      'profilePictureURL': UserData.currentLoggedInUser!.photoURL
+      'profilePictureURL': UserData.currentLoggedInUser!.photoURL,
+      'commentCount': 0
     });
 
     String postID = newPostRef.id;

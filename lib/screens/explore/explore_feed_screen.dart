@@ -5,14 +5,14 @@ import 'package:witwire/widgets/appbar/friends_and_chat_appbar.dart';
 import 'package:witwire/widgets/bottomnavbar/bottomnavbar.dart';
 import 'package:witwire/widgets/postlist/post_listview_builder.dart';
 
-class TodayTopFeed extends StatefulWidget {
-  const TodayTopFeed({super.key});
+class ExploreFeed extends StatefulWidget {
+  const ExploreFeed({super.key});
 
   @override
-  State<TodayTopFeed> createState() => _TodayTopFeedState();
+  State<ExploreFeed> createState() => _ExploreFeedState();
 }
 
-class _TodayTopFeedState extends State<TodayTopFeed> {
+class _ExploreFeedState extends State<ExploreFeed> {
   final ScrollController scrollController = ScrollController();
 
   @override
@@ -28,6 +28,6 @@ class _TodayTopFeedState extends State<TodayTopFeed> {
   }
 
   Query<Map<String, dynamic>> getStream() {
-    return QueryHelper.getTodayQuery().orderBy('likes', descending: true);
+    return QueryHelper.getTodayQuery();
   }
 }

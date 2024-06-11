@@ -232,8 +232,6 @@ class _PostState extends State<Post> {
   }
 
   void goToComments() async {
-    //TODO:
-
     QuerySnapshot<Map<String, dynamic>> comments = await FirebaseFirestore
         .instance
         .collection('posts')

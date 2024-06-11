@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:witwire/screens/showUser/show_user.dart';
 
 class PostComment extends StatelessWidget {
   final QueryDocumentSnapshot snap;

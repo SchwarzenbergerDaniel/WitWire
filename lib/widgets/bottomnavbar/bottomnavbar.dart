@@ -4,7 +4,7 @@ import 'package:witwire/screens/create/create_screen.dart';
 import 'package:witwire/screens/home/home_screen.dart';
 import 'package:witwire/screens/myprofile/myprofile_screen.dart';
 import 'package:witwire/screens/search/search_screen.dart';
-import 'package:witwire/screens/top/topposts_screen.dart';
+import 'package:witwire/screens/explore/explore_feed_screen.dart';
 import 'package:witwire/utils/colors.dart';
 import 'package:witwire/widgets/bottomnavbar/bottomnavbaritems.dart';
 
@@ -29,7 +29,7 @@ class BottomNavBar extends StatelessWidget {
         newPage = CreateScreen(userNeedsToUpload: false);
         break;
       case 3:
-        newPage = const TodayTopFeed();
+        newPage = const ExploreFeed();
         break;
       case 4:
         newPage = const MyProfileScreen();
