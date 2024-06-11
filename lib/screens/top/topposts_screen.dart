@@ -20,14 +20,14 @@ class _TodayTopFeedState extends State<TodayTopFeed> {
     return Scaffold(
       appBar: const FriendsAndChatAppBar(),
       body: PostListViewBuilder(
-          postStream: getStream(), controller: scrollController),
+          isSortable: true,
+          postQuery: getStream(),
+          controller: scrollController),
       bottomNavigationBar: BottomNavBar(3),
     );
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> getStream() {
-    return QueryHelper.getTodayQuery()
-        .orderBy('likes', descending: true)
-        .snapshots();
+  Query<Map<String, dynamic>> getStream() {
+    return QueryHelper.getTodayQuery().orderBy('likes', descending: true);
   }
 }

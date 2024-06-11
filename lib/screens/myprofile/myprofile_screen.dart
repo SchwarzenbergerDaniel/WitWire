@@ -37,18 +37,18 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         ),
       ),
       body: PostListViewBuilder(
+        isSortable: true,
         controller: _controller,
-        postStream: getStream(),
+        postQuery: getStream(),
       ),
       bottomNavigationBar: BottomNavBar(4),
     );
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> getStream() {
+  Query<Map<String, dynamic>> getStream() {
     return FirebaseFirestore.instance
         .collection("posts")
         .where("uid", isEqualTo: UserData.currentLoggedInUser!.uid)
-        .orderBy("date", descending: true)
-        .snapshots();
+        .orderBy("date", descending: true);
   }
 }

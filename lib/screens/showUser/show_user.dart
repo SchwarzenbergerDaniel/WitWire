@@ -168,8 +168,9 @@ class _ShowUserState extends State<ShowUser> {
               ],
             ),
             PostListViewBuilder(
+              isSortable: true,
               controller: _controller,
-              postStream: getStream(),
+              postQuery: getStream(),
             ),
           ],
         ),
@@ -178,12 +179,11 @@ class _ShowUserState extends State<ShowUser> {
     );
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> getStream() {
+  Query<Map<String, dynamic>> getStream() {
     return FirebaseFirestore.instance
         .collection("posts")
         .orderBy("date", descending: true)
-        .where("uid", isEqualTo: widget.user["uid"])
-        .snapshots();
+        .where("uid", isEqualTo: widget.user["uid"]);
   }
 
   AppBar _buildAppBar() {

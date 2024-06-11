@@ -50,6 +50,10 @@ class AuthMethods {
           beschreibung.isEmpty) {
         return "Fülle alle Felder aus!";
       }
+      if (username.length > 20) {
+        return "Maximal 20 Zeichen im Username";
+      }
+
       UserCredential user = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       String userID = user.user!.uid;

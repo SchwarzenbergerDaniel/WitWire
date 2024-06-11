@@ -21,17 +21,15 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: const FriendsAndChatAppBar(),
       backgroundColor: mainColor,
-      body:
-          PostListViewBuilder(postStream: getStream(), controller: _controller),
+      body: PostListViewBuilder(
+          isSortable: true, postQuery: getStream(), controller: _controller),
       bottomNavigationBar: BottomNavBar(0),
     );
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> getStream() {
+  Query<Map<String, dynamic>> getStream() {
     var asList = UserData.currentLoggedInUser!.following.toList();
 
-    return QueryHelper.getTodayQuery()
-        .where('uid', whereIn: asList)
-        .snapshots();
+    return QueryHelper.getTodayQuery().where('uid', whereIn: asList);
   }
 }

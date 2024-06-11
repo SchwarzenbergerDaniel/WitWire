@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:witwire/firebaseParser/post_data.dart';
 import 'package:witwire/firebaseParser/user_data.dart';
 import 'package:witwire/main.dart';
+import 'package:witwire/screens/comments/comment_screen.dart';
 import 'package:witwire/screens/search/search_screen.dart';
 import 'package:witwire/screens/showUser/show_user.dart';
 import 'package:witwire/utils/colors.dart';
@@ -230,8 +231,23 @@ class _PostState extends State<Post> {
     );
   }
 
-  void goToComments() {
+  void goToComments() async {
     //TODO:
+
+    QuerySnapshot<Map<String, dynamic>> comments = await FirebaseFirestore
+        .instance
+        .collection('posts')
+        .doc(widget._post.postID)
+        .collection('comments')
+        .get();
+    navigatorKey.currentState!.push(
+      MaterialPageRoute(
+        builder: (context) => Comments(
+          comments: comments,
+          postID: widget._post.postID,
+        ),
+      ),
+    );
   }
 
   void likePressed() {

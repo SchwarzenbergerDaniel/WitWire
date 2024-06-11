@@ -58,26 +58,27 @@ class _SearchScreenState extends State<SearchScreen> {
                         itemCount: users.length,
                         itemBuilder: (context, index) {
                           return ListTile(
-                              title:
-                                  UserPrevOnClickProfile(user: users[index]));
+                            title: UserPrevOnClickProfile(user: users[index]),
+                          );
                         },
                       );
                     },
                   ),
                 )
               : PostListViewBuilder(
-                  postStream: getPostStream(), controller: _scrollController),
+                  isSortable: true,
+                  postQuery: getPostStream(),
+                  controller: _scrollController),
         ],
       ),
       bottomNavigationBar: BottomNavBar(1),
     );
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> getPostStream() {
+  Query<Map<String, dynamic>> getPostStream() {
     String hashTag = _searchText.length > 1 ? _searchText.substring(1) : "";
     return QueryHelper.getTodayQuery()
-        .where('hashtags', arrayContains: hashTag)
-        .snapshots();
+        .where('hashtags', arrayContains: hashTag);
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getProfileStream() {
