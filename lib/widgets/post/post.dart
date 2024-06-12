@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:witwire/firebaseParser/post_data.dart';
@@ -50,6 +51,28 @@ class _PostState extends State<Post> {
   }
 
   bool isExpanded = false;
+
+  Future<Widget> getImageWidget(String? pictureUrl) async {
+    if (pictureUrl == null) throw Exception('Image URL is null');
+    try {
+      final ref = FirebaseStorage.instance.refFromURL(pictureUrl);
+      final url =
+          await ref.getDownloadURL().timeout(const Duration(seconds: 10));
+      return Image.network(
+        url,
+        loadingBuilder: (_, Widget child, ImageChunkEvent? loadingProgress) {
+          if (loadingProgress == null) return child;
+          return const Center(
+            child: CircularProgressIndicator(
+              color: Colors.white,
+            ),
+          );
+        },
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

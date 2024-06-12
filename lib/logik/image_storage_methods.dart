@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
-import 'package:witwire/firebaseParser/user_data.dart';
 
 class ImageStorageMethods {
   static final FirebaseStorage _storage = FirebaseStorage.instance;
@@ -14,13 +13,10 @@ class ImageStorageMethods {
   }
 
   static Future<String> _uploadImage(String folderName, Uint8List img) async {
-    Reference ref = _storage
-        .ref()
-        .child(folderName)
-        .child("${UserData.currentLoggedInUser!.uid}${getRandomString(10)}");
+    Reference ref = _storage.ref().child(folderName).child(getRandomString(20));
+
     UploadTask task = ref.putData(img);
     TaskSnapshot sn = await task;
-
     String url = await sn.ref.getDownloadURL();
 
     return url;

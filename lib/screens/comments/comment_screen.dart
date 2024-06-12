@@ -73,7 +73,7 @@ class _CommentsState extends State<Comments> {
                 ListView.builder(
                   itemCount: widget.comments.length,
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
                     return ListTile(
                       title: PostComment(snap: widget.comments[index]),
@@ -130,6 +130,7 @@ class _CommentsState extends State<Comments> {
         .doc(widget.postID)
         .update({'commentCount': FieldValue.increment(1)});
 
+    _controller.clear();
     setState(() {
       myComments.add(message);
     });

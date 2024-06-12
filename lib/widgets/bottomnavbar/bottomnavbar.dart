@@ -16,7 +16,6 @@ class BottomNavBar extends StatelessWidget {
   BottomNavBar(this._currIndex, {super.key});
 
   void onTap(int index) {
-    if (index == _currIndex) return;
     Widget newPage;
     switch (index) {
       case 0:

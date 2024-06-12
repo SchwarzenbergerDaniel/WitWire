@@ -1,9 +1,7 @@
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:witwire/logik/queryhelper.dart';
-import 'package:witwire/main.dart';
 import 'package:witwire/screens/create/userupload/userupload_screen.dart';
 import 'package:witwire/utils/colors.dart';
 

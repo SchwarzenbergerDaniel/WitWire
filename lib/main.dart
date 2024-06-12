@@ -19,6 +19,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   QueryHelper.initQueryHelper();
+
   runApp(const MyApp());
 }
 
@@ -29,7 +30,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     NewDayProvider a = NewDayProvider();
     a.start(context);
-    FirebaseAuth.instance.authStateChanges();
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => a),
@@ -38,51 +38,36 @@ class MyApp extends StatelessWidget {
         navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
         title: 'WitWire',
-        home: StreamBuilder(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: ((context, snapshot) {
-            print("TEST");
-            if (snapshot.hasError) {
-              return Center(child: Text(snapshot.error.toString()));
-            } else if (snapshot.connectionState != ConnectionState.active) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            final user = snapshot.data;
-            if (user == null) {
-              print("USER IS NULl");
-
-              return const LoginScreen();
-            }
-            print("ZSER IS NOT NULL");
-            return FutureBuilder(
-              future: UserData.initLoggedInUser(),
-              builder: (context2, valid) {
-                if (valid.connectionState != ConnectionState.waiting) {
-                  return FutureBuilder<bool>(
-                    future: AuthMethods.uploadedToday(
-                        UserData.currentLoggedInUser!),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState != ConnectionState.waiting) {
-                        bool? uploadToday = snapshot.data;
-                        if (uploadToday == true) {
-                          return const HomeScreen();
-                        } else {
-                          return CreateScreen(userNeedsToUpload: true);
+        home: FirebaseAuth.instance.currentUser == null
+            ? const LoginScreen()
+            : FutureBuilder(
+                future: UserData.initLoggedInUser(),
+                builder: (context2, valid) {
+                  if (valid.connectionState != ConnectionState.waiting) {
+                    return FutureBuilder<bool>(
+                      future: AuthMethods.uploadedToday(
+                          UserData.currentLoggedInUser!),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState !=
+                            ConnectionState.waiting) {
+                          bool? uploadToday = snapshot.data;
+                          if (uploadToday == true) {
+                            return const HomeScreen();
+                          } else {
+                            return CreateScreen(userNeedsToUpload: true);
+                          }
                         }
-                      }
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    },
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      },
+                    );
+                  }
+                  return const Center(
+                    child: CircularProgressIndicator(),
                   );
-                }
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              },
-            );
-          }),
-        ),
+                },
+              ),
       ),
     );
   }

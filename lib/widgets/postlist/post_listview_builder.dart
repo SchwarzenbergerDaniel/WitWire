@@ -23,127 +23,146 @@ class PostListViewBuilder extends StatefulWidget {
 
 class _PostListViewBuilderState extends State<PostListViewBuilder> {
   SortingType type = SortingType.normal;
+  List<QueryDocumentSnapshot> posts = [];
+  bool isLoading = false;
+  bool hasMore = true;
+  final int pageSize = 10;
+  DocumentSnapshot? lastDocument;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(_scrollListener);
+    _loadMorePosts();
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_scrollListener);
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    if (widget.controller.position.pixels ==
+        widget.controller.position.maxScrollExtent) {
+      _loadMorePosts();
+    }
+  }
 
   void _changeSortingType(SortingType type) {
     if (type != this.type) {
       setState(() {
         this.type = type;
+        posts.clear();
+        lastDocument = null;
+        hasMore = true;
+        _loadMorePosts();
       });
+    }
+  }
+
+  Future<void> _loadMorePosts() async {
+    print("LOAD");
+    if (isLoading || !hasMore) return;
+
+    setState(() {
+      isLoading = true;
+    });
+
+    Query<Map<String, dynamic>> query = _getQuery();
+    if (lastDocument != null) {
+      query = query.startAfterDocument(lastDocument!);
+    }
+
+    final snapshot = await query.limit(pageSize).get();
+    if (snapshot.docs.isNotEmpty) {
+      setState(() {
+        posts.addAll(snapshot.docs);
+        lastDocument = snapshot.docs.last;
+        if (snapshot.docs.length < pageSize) {
+          hasMore = false;
+        }
+      });
+    } else {
+      setState(() {
+        hasMore = false;
+      });
+    }
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  Query<Map<String, dynamic>> _getQuery() {
+    switch (type) {
+      case SortingType.top:
+        return widget.postQuery.orderBy('likes', descending: true);
+      case SortingType.least:
+        return widget.postQuery.orderBy('likes', descending: false);
+      case SortingType.mostcomments:
+        return widget.postQuery.orderBy('commentCount', descending: true);
+      case SortingType.newest:
+        return widget.postQuery.orderBy('date', descending: true);
+      case SortingType.oldest:
+        return widget.postQuery.orderBy('date', descending: false);
+      case SortingType.normal:
+      default:
+        return widget.postQuery;
     }
   }
 
   Widget _buildDropDownMenu() {
     return Align(
       alignment: Alignment.center,
-      child: DropdownMenu(
-        label: const Text("Sortiere"),
-        enableSearch: false,
-        onSelected: (index) {
+      child: DropdownButton<int>(
+        value: type.index,
+        items: const [
+          DropdownMenuItem(value: 0, child: Text("Normal")),
+          DropdownMenuItem(value: 1, child: Text("Top")),
+          DropdownMenuItem(value: 2, child: Text("Bottom")),
+          DropdownMenuItem(value: 3, child: Text("Most Comments")),
+          DropdownMenuItem(value: 4, child: Text("Newest")),
+          DropdownMenuItem(value: 5, child: Text("Oldest")),
+        ],
+        onChanged: (index) {
           if (index != null) {
-            switch (index) {
-              case 0:
-                _changeSortingType(SortingType.normal);
-                break;
-              case 1:
-                _changeSortingType(SortingType.top);
-                break;
-              case 2:
-                _changeSortingType(SortingType.least);
-                break;
-              case 3:
-                _changeSortingType(SortingType.mostcomments);
-                break;
-              case 4:
-                _changeSortingType(SortingType.newest);
-                break;
-              case 5:
-                _changeSortingType(SortingType.oldest);
-                break;
-              default:
-            }
+            _changeSortingType(SortingType.values[index]);
           }
         },
-        dropdownMenuEntries: const <DropdownMenuEntry<int>>[
-          DropdownMenuEntry(value: 0, label: ""),
-          DropdownMenuEntry(value: 1, label: "Top"),
-          DropdownMenuEntry(value: 2, label: "Bottom"),
-          DropdownMenuEntry(value: 3, label: "Meisten Kommentare"),
-          DropdownMenuEntry(value: 4, label: "Neueste"),
-          DropdownMenuEntry(value: 5, label: "Älteste")
-        ],
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(height: 20),
-        // Auswahl wonach sortiert werden soll
-        _buildDropDownMenu(),
-        // Posts
-        Expanded(
-          child: StreamBuilder<QuerySnapshot>(
-            stream: type == SortingType.normal || !widget.isSortable
-                ? getNormalStream()
-                : type == SortingType.top
-                    ? getTopStream()
-                    : type == SortingType.least
-                        ? getBottomStream()
-                        : type == SortingType.newest
-                            ? getNewestStream()
-                            : type == SortingType.oldest
-                                ? getOldestStream()
-                                : getMostCommentsStream(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return const NoDataWidget();
+    return CustomScrollView(
+      controller: widget.controller,
+      slivers: [
+        SliverToBoxAdapter(
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              _buildDropDownMenu(),
+            ],
+          ),
+        ),
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              if (index == posts.length) {
+                return const Center(child: CircularProgressIndicator());
               }
-              final posts = snapshot.data!.docs;
-              if (posts.isEmpty) return const NoDataWidget();
-
-              return ListView.builder(
-                itemCount: posts.length,
-                controller: widget.controller,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Post(
-                      post: PostData.getPostDataFromSnapshot(posts[index]),
-                    ),
-                  );
-                },
+              return ListTile(
+                title: Post(
+                  post: PostData.getPostDataFromSnapshot(posts[index]),
+                ),
               );
             },
+            childCount: posts.length + (hasMore ? 1 : 0),
           ),
         ),
       ],
     );
-  }
-
-  Stream<QuerySnapshot<Map<String, dynamic>>> getNormalStream() {
-    return widget.postQuery.snapshots();
-  }
-
-  Stream<QuerySnapshot<Map<String, dynamic>>> getTopStream() {
-    return widget.postQuery.orderBy('likes', descending: true).snapshots();
-  }
-
-  Stream<QuerySnapshot<Map<String, dynamic>>> getBottomStream() {
-    return widget.postQuery.orderBy('likes', descending: false).snapshots();
-  }
-
-  Stream<QuerySnapshot<Map<String, dynamic>>> getMostCommentsStream() {
-    return widget.postQuery
-        .orderBy('commentCount', descending: true)
-        .snapshots();
-  }
-
-  Stream<QuerySnapshot<Map<String, dynamic>>> getNewestStream() {
-    return widget.postQuery.orderBy('date', descending: true).snapshots();
-  }
-
-  Stream<QuerySnapshot<Map<String, dynamic>>> getOldestStream() {
-    return widget.postQuery.orderBy('date', descending: false).snapshots();
   }
 }

@@ -166,6 +166,11 @@ class _ShowUserState extends State<ShowUser> {
               ],
             ),
             const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: Text(widget.user["description"]),
+            ),
+            const SizedBox(height: 20),
             SizedBox(
               height: MediaQuery.of(context).size.height,
               child: PostListViewBuilder(

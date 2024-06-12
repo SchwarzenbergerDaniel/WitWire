@@ -66,16 +66,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
     } else {
       response = "Wähle ein Bild!";
     }
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(response),
-    ));
+    if (response != "success")
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(response),
+      ));
 
     setState(() {
       loading = false;
     });
 
     if (response == "success") {
-      print("SUCCESS");
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const LoginScreen()),

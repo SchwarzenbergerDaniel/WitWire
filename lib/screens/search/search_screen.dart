@@ -42,9 +42,9 @@ class _SearchScreenState extends State<SearchScreen> {
                       _searchText = text;
                     })
                   }),
-          _searchText.startsWith('#') == false
-              ? Flexible(
-                  child: StreamBuilder<QuerySnapshot>(
+          Expanded(
+            child: _searchText.startsWith('#') == false
+                ? StreamBuilder<QuerySnapshot>(
                     stream: getProfileStream(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
@@ -63,12 +63,12 @@ class _SearchScreenState extends State<SearchScreen> {
                         },
                       );
                     },
-                  ),
-                )
-              : PostListViewBuilder(
-                  isSortable: true,
-                  postQuery: getPostStream(),
-                  controller: _scrollController),
+                  )
+                : PostListViewBuilder(
+                    isSortable: true,
+                    postQuery: getPostStream(),
+                    controller: _scrollController),
+          ),
         ],
       ),
       bottomNavigationBar: BottomNavBar(1),

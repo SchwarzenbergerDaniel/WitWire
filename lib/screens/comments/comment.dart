@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:witwire/main.dart';
+import 'package:witwire/screens/search/search_screen.dart';
 
 class PostComment extends StatelessWidget {
   final QueryDocumentSnapshot snap;
@@ -22,6 +24,16 @@ class PostComment extends StatelessWidget {
     }
   }
 
+  void _onClick() {
+    navigatorKey.currentState!.pushReplacement(
+      MaterialPageRoute(
+        builder: ((context) => SearchScreen(
+              startSearch: snap["username"],
+            )),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     String comment = snap["comment"];
@@ -39,15 +51,18 @@ class PostComment extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Text(
-                  username,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(width: 10),
-                Text(timeToShow)
-              ],
+            InkWell(
+              onTap: _onClick,
+              child: Row(
+                children: [
+                  Text(
+                    username,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(timeToShow)
+                ],
+              ),
             ),
             Text(comment),
           ],

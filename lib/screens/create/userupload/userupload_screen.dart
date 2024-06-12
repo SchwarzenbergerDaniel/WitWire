@@ -27,6 +27,7 @@ class _UserUploadScreenState extends State<UserUploadScreen> {
           .then((value) => PostMethods.uploadPost(photoURL, uid, username,
               description, value.toDate().isBefore(DateTime.now())));
     });
+
     navigatorKey.currentState!.pushAndRemoveUntil(
         //Keine möglichkeit geben zurück zu gehen.
         MaterialPageRoute(

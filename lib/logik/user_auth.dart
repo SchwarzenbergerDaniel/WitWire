@@ -52,10 +52,10 @@ class AuthMethods {
       if (username.length > 20) {
         return "Maximal 20 Zeichen im Username";
       }
-
       UserCredential user = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       String userID = user.user!.uid;
+
       String url = await ImageStorageMethods.uploadProfilePicture(file);
       await _firestore.collection(_userCollectionName).doc(userID).set({
         'username': username,
@@ -69,6 +69,7 @@ class AuthMethods {
         'usernamelength': username.length,
         'lastupload': DateTime.now().add(const Duration(days: -2))
       });
+
       return "success";
     } catch (e) {
       return e.toString();

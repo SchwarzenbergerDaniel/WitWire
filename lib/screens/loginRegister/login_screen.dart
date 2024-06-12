@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:witwire/firebaseParser/user_data.dart';
@@ -16,27 +17,45 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _emailController = TextEditingController();
+  final _emailOrUsernameController = TextEditingController();
   final _passwordController = TextEditingController();
   bool isloading = false;
   @override
   void dispose() {
     super.dispose();
-    _emailController.dispose();
+    _emailOrUsernameController.dispose();
     _passwordController.dispose();
+  }
+
+  Future<String?> getEmail() async {
+    final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .where('username', isEqualTo: _emailOrUsernameController.text)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      //Ist eine Nutzername eingabe
+      final userDoc = querySnapshot.docs.first;
+      return userDoc['email'];
+    } else {
+      return _emailOrUsernameController.text;
+    }
   }
 
   void login() async {
     setState(() {
       isloading = true;
     });
-    String mail = _emailController.text;
     String password = _passwordController.text;
-    String response = await AuthMethods.login(mail, password);
+    String? email = await getEmail();
+    String response = "User doesnt exist";
+    if (email != null) {
+      response = await AuthMethods.login(email, password);
+    }
     setState(() {
       isloading = false;
     });
-    if (response != "success") {
+    if (response != "success" && response != "success") {
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -86,9 +105,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   // email
                   TextInput(
-                    hintText: "E-Mail",
+                    hintText: "Benutzername oder E-Mail",
                     inputType: TextInputType.emailAddress,
-                    controller: _emailController,
+                    controller: _emailOrUsernameController,
                   ),
                   const SizedBox(height: 16),
 
