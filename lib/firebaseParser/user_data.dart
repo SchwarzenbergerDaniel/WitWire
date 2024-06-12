@@ -42,6 +42,8 @@ class UserData {
   setUser() async {
     DocumentSnapshot snap =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
+    if (snap.data() == null) return;
     Map<String, dynamic> asMap = (snap.data() as Map<String, dynamic>);
     email = asMap["email"];
     username = asMap["username"];
