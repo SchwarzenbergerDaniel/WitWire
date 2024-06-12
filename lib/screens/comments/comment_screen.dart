@@ -20,84 +20,91 @@ class Comments extends StatefulWidget {
 
 class _CommentsState extends State<Comments> {
   final TextEditingController _controller = TextEditingController();
-  final ScrollController _scrollController = ScrollController();
 
   List<String> myComments = List.empty(growable: true);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Kommentare",
-        ),
+        title: const Text("Kommentare"),
         centerTitle: false,
         backgroundColor: mainColor,
         foregroundColor: secondaryColor,
       ),
-      body: Column(children: [
-        for (int i = 0; i < myComments.length; i++)
-          ListTile(
-            title: Row(
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView(
               children: [
-                CircleAvatar(
-                  radius: 24,
-                  foregroundImage:
-                      Image.network(UserData.currentLoggedInUser!.photoURL)
-                          .image,
-                ),
-                const SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+                ...List.generate(myComments.length, (i) {
+                  return ListTile(
+                    title: Row(
                       children: [
-                        Text(
-                          UserData.currentLoggedInUser!.username,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        CircleAvatar(
+                          radius: 24,
+                          foregroundImage: Image.network(
+                            UserData.currentLoggedInUser!.photoURL,
+                          ).image,
                         ),
                         const SizedBox(width: 10),
-                        const Text('Jetzt')
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  UserData.currentLoggedInUser!.username,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                const Text('Jetzt'),
+                              ],
+                            ),
+                            Text(myComments[i]),
+                          ],
+                        ),
                       ],
                     ),
-                    Text(myComments[i]),
-                  ],
-                )
+                  );
+                }),
+                //Aus der Datenbank
+                ListView.builder(
+                  itemCount: widget.comments.length,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: PostComment(snap: widget.comments[index]),
+                    );
+                  },
+                ),
               ],
             ),
           ),
-
-        //Kommentare aus der DB
-        ListView.builder(
-          itemCount: widget.comments.length,
-          shrinkWrap: true,
-          controller: _scrollController,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: PostComment(snap: widget.comments[index]),
-            );
-          },
-        ),
-      ]),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Row(
-          children: [
-            Expanded(
-              child: TextField(
-                controller: _controller,
-                decoration: const InputDecoration(
-                  hintText: "Kommentiere",
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _controller,
+                    decoration: const InputDecoration(
+                      hintText: "Kommentiere",
+                    ),
+                    keyboardType: TextInputType.text,
+                  ),
                 ),
-                keyboardType: TextInputType.text,
-              ),
+                IconButton(
+                  color: Colors.blue,
+                  onPressed: sendMessage,
+                  icon: const Icon(Icons.send),
+                ),
+              ],
             ),
-            IconButton(
-              color: Colors.blue,
-              onPressed: sendMessage,
-              icon: const Icon(Icons.send),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

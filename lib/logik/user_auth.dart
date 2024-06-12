@@ -12,7 +12,6 @@ class AuthMethods {
   static const String _userCollectionName = "users";
 
   static Future<bool> uploadedToday(UserData data) async {
-    //Schauen, ob es zwischen der Upload-Zeit von gestern und heute ist oder zwischen der von heute und morgen
     DateTime now = DateTime.now();
     Timestamp today =
         await DateMethods.getTimeStampByKey(DateMethods.getKeyByDate(now));
@@ -57,9 +56,7 @@ class AuthMethods {
       UserCredential user = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       String userID = user.user!.uid;
-
       String url = await ImageStorageMethods.uploadProfilePicture(file);
-
       await _firestore.collection(_userCollectionName).doc(userID).set({
         'username': username,
         'uid': userID,
@@ -72,7 +69,6 @@ class AuthMethods {
         'usernamelength': username.length,
         'lastupload': DateTime.now().add(const Duration(days: -2))
       });
-
       return "success";
     } catch (e) {
       return e.toString();

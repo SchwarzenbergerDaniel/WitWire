@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:witwire/firebaseParser/post_data.dart';
 import 'package:witwire/logik/get_last_day_posts.dart';
-import 'package:witwire/main.dart';
 import 'package:witwire/providers/newdayprovider.dart';
-import 'package:witwire/screens/search/search_screen.dart';
 import 'package:witwire/utils/colors.dart';
 import 'package:witwire/widgets/appbar/friends_and_chat_appbar.dart';
 import 'package:witwire/widgets/bottomnavbar/bottomnavbar.dart';
@@ -36,12 +34,19 @@ class _ShowNextUploadScreenState extends State<ShowNextUploadScreen> {
       topPost = topPost;
     });
 
-    String a;
-    PostData b;
-    (a, b) = await LastDayPosts.getTopHashTag();
+    mostCommentsPost = await LastDayPosts.getMostCommentsPost();
     setState(() {
-      topHashTagString = a;
-      topHashTagPost = b;
+      mostCommentsPost = mostCommentsPost;
+    });
+
+    firstPost = await LastDayPosts.getFirstPost();
+    setState(() {
+      firstPost = firstPost;
+    });
+
+    lastPost = await LastDayPosts.getLastPost();
+    setState(() {
+      lastPost = lastPost;
     });
 
     bottomPost = await LastDayPosts.getBottomPost();
@@ -51,10 +56,10 @@ class _ShowNextUploadScreenState extends State<ShowNextUploadScreen> {
   }
 
   PostData? topPost;
-  String topHashTagString = "";
-  PostData? topHashTagPost;
-
+  PostData? mostCommentsPost;
   PostData? bottomPost;
+  PostData? firstPost;
+  PostData? lastPost;
 
   Widget _buildPostInfo(String text, PostData? post) {
     return Column(
@@ -66,11 +71,7 @@ class _ShowNextUploadScreenState extends State<ShowNextUploadScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        post == null
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : Post(post: post),
+        post == null ? const Text("") : Post(post: post),
       ],
     );
   }
@@ -104,30 +105,14 @@ class _ShowNextUploadScreenState extends State<ShowNextUploadScreen> {
                       //Top Post gestern:
                       _buildPostInfo("Top Likes:", topPost),
 
-                      //Meiste Kommentare
-                      const Text(
-                        "Top Hashtag:",
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () => navigatorKey.currentState!.pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => SearchScreen(
-                              startSearch: "#$topHashTagString",
-                            ),
-                          ),
-                        ),
-                        child: Text(
-                          topHashTagString,
-                          style: const TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue),
-                        ),
-                      ),
+                      //Top Post gestern:
+                      _buildPostInfo("Top Kommentiert:", mostCommentsPost),
+
+                      //Erster Post gestern:
+                      _buildPostInfo("Erster", firstPost),
+
+                      //Letzter Post gestern:
+                      _buildPostInfo("Letzter", lastPost),
 
                       //Wenigsten Likes
                       _buildPostInfo("Min Likes:", bottomPost),

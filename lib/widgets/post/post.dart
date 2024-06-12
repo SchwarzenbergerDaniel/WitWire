@@ -142,7 +142,8 @@ class _PostState extends State<Post> {
               IconButton(
                 onPressed: goToComments,
                 icon: const Icon(Icons.chat_bubble_outline),
-              )
+              ),
+              Text(widget._post.commentCount.toString()),
             ],
           )
         ],
@@ -181,6 +182,7 @@ class _PostState extends State<Post> {
   }
 
   RichText _buildRichText(String text) {
+    const fontSize = 18.0;
     final List<InlineSpan> children = [];
     final RegExp hashtagRegExp = RegExp(r'(#[a-zA-Z0-9_]+)');
     final matches = hashtagRegExp.allMatches(text);
@@ -190,7 +192,10 @@ class _PostState extends State<Post> {
       if (match.start > lastMatchEnd) {
         children.add(TextSpan(
           text: text.substring(lastMatchEnd, match.start),
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: fontSize,
+              color: Colors.black),
         ));
       }
       children.add(
@@ -199,6 +204,7 @@ class _PostState extends State<Post> {
           style: const TextStyle(
             color: Colors.blue,
             fontWeight: FontWeight.bold,
+            fontSize: fontSize,
           ),
           recognizer: TapGestureRecognizer()
             ..onTap = () {
@@ -212,7 +218,10 @@ class _PostState extends State<Post> {
     if (lastMatchEnd < text.length) {
       children.add(TextSpan(
         text: text.substring(lastMatchEnd),
-        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: fontSize,
+            color: Colors.black),
       ));
     }
 

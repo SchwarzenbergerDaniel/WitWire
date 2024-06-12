@@ -6,8 +6,6 @@ import 'package:witwire/widgets/postlist/nodata_widget.dart';
 
 enum SortingType { normal, top, least, mostcomments, newest, oldest }
 
-//TODO: User auswählen lassen welcher SortingType
-
 class PostListViewBuilder extends StatefulWidget {
   final Query<Map<String, dynamic>> postQuery;
   final ScrollController controller;
@@ -35,42 +33,45 @@ class _PostListViewBuilderState extends State<PostListViewBuilder> {
   }
 
   Widget _buildDropDownMenu() {
-    return DropdownMenu(
-      label: const Text("Sortiere"),
-      enableSearch: false,
-      onSelected: (index) {
-        if (index != null) {
-          switch (index) {
-            case 0:
-              _changeSortingType(SortingType.normal);
-              break;
-            case 1:
-              _changeSortingType(SortingType.top);
-              break;
-            case 2:
-              _changeSortingType(SortingType.least);
-              break;
-            case 3:
-              _changeSortingType(SortingType.mostcomments);
-              break;
-            case 4:
-              _changeSortingType(SortingType.newest);
-              break;
-            case 5:
-              _changeSortingType(SortingType.oldest);
-              break;
-            default:
+    return Align(
+      alignment: Alignment.center,
+      child: DropdownMenu(
+        label: const Text("Sortiere"),
+        enableSearch: false,
+        onSelected: (index) {
+          if (index != null) {
+            switch (index) {
+              case 0:
+                _changeSortingType(SortingType.normal);
+                break;
+              case 1:
+                _changeSortingType(SortingType.top);
+                break;
+              case 2:
+                _changeSortingType(SortingType.least);
+                break;
+              case 3:
+                _changeSortingType(SortingType.mostcomments);
+                break;
+              case 4:
+                _changeSortingType(SortingType.newest);
+                break;
+              case 5:
+                _changeSortingType(SortingType.oldest);
+                break;
+              default:
+            }
           }
-        }
-      },
-      dropdownMenuEntries: const <DropdownMenuEntry<int>>[
-        DropdownMenuEntry(value: 0, label: ""),
-        DropdownMenuEntry(value: 1, label: "Top"),
-        DropdownMenuEntry(value: 2, label: "Bottom"),
-        DropdownMenuEntry(value: 3, label: "Meisten Kommentare"),
-        DropdownMenuEntry(value: 4, label: "Neueste"),
-        DropdownMenuEntry(value: 5, label: "Älteste")
-      ],
+        },
+        dropdownMenuEntries: const <DropdownMenuEntry<int>>[
+          DropdownMenuEntry(value: 0, label: ""),
+          DropdownMenuEntry(value: 1, label: "Top"),
+          DropdownMenuEntry(value: 2, label: "Bottom"),
+          DropdownMenuEntry(value: 3, label: "Meisten Kommentare"),
+          DropdownMenuEntry(value: 4, label: "Neueste"),
+          DropdownMenuEntry(value: 5, label: "Älteste")
+        ],
+      ),
     );
   }
 
@@ -79,10 +80,10 @@ class _PostListViewBuilderState extends State<PostListViewBuilder> {
     return Column(
       children: [
         const SizedBox(height: 20),
-        //Auswahl wonach sortiert werden soll
+        // Auswahl wonach sortiert werden soll
         _buildDropDownMenu(),
-        //Posts
-        Flexible(
+        // Posts
+        Expanded(
           child: StreamBuilder<QuerySnapshot>(
             stream: type == SortingType.normal || !widget.isSortable
                 ? getNormalStream()
@@ -104,7 +105,6 @@ class _PostListViewBuilderState extends State<PostListViewBuilder> {
 
               return ListView.builder(
                 itemCount: posts.length,
-                shrinkWrap: true,
                 controller: widget.controller,
                 itemBuilder: (context, index) {
                   return ListTile(

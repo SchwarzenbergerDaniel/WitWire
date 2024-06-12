@@ -12,6 +12,7 @@ class PostData {
   late List<String> hashtags;
   late int currentUserLike;
   late String profilePictureURL;
+  late int commentCount;
   PostData(
       {required this.postID,
       required this.uid,
@@ -22,6 +23,7 @@ class PostData {
       required this.publishedTime,
       required this.hashtags,
       required this.currentUserLike,
+      required this.commentCount,
       required this.profilePictureURL});
   void setCurrentUserLike(int newstatus) async {
     if (newstatus == currentUserLike) return;
@@ -69,6 +71,7 @@ class PostData {
         publishedTime: (snap["date"] as Timestamp).toDate(),
         hashtags: List<String>.from(snap["hashtags"]),
         currentUserLike: currentUserLike,
+        commentCount: snap["commentCount"],
         profilePictureURL: snap["profilePictureURL"]);
   }
 
@@ -86,7 +89,7 @@ class PostData {
     DateTime publishedTime = (asMap["date"] as Timestamp).toDate();
     List<String> hashtags = List<String>.from(asMap["hashtags"]);
     Map<String, dynamic> votes = asMap["votes"] ?? {};
-
+    int commentCount = asMap["commentCount"];
     String currentUserUID = UserData.currentLoggedInUser!.uid;
     int currentUserLike = votes.containsKey(currentUserUID) &&
             votes[currentUserUID] == true
@@ -105,6 +108,7 @@ class PostData {
         publishedTime: publishedTime,
         hashtags: hashtags,
         currentUserLike: currentUserLike,
+        commentCount: commentCount,
         profilePictureURL: profilePictureURL);
   }
 }

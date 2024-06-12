@@ -75,6 +75,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
 
     if (response == "success") {
+      print("SUCCESS");
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const LoginScreen()),
@@ -87,127 +88,131 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       backgroundColor: loginRegisterBackgroundColor,
       body: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              //bild
-              const SizedBox(height: 32),
-              SvgPicture.asset('assets/logo.svg', height: 128),
+        child: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                //bild
+                const SizedBox(height: 32),
+                SvgPicture.asset('assets/logo.svg', height: 128),
 
-              const SizedBox(height: 32),
+                const SizedBox(height: 32),
 
-              //Profilbild.
-              Stack(children: [
-                _image != null
-                    ? CircleAvatar(
-                        radius: 64,
-                        backgroundImage: MemoryImage(_image!),
-                      )
-                    : const CircleAvatar(
-                        radius: 64,
-                        backgroundImage: NetworkImage(
-                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSibZzICT3UJ_BuQBQZehq1tmBwrWZ6v7-rSQ&s'),
+                //Profilbild.
+                Stack(
+                  children: [
+                    _image != null
+                        ? CircleAvatar(
+                            radius: 64,
+                            backgroundImage: MemoryImage(_image!),
+                          )
+                        : const CircleAvatar(
+                            radius: 64,
+                            backgroundImage: NetworkImage(
+                                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSibZzICT3UJ_BuQBQZehq1tmBwrWZ6v7-rSQ&s'),
+                          ),
+                    Positioned(
+                      bottom: -10,
+                      left: 80,
+                      child: IconButton(
+                        onPressed: () {
+                          chooseImageFromGallery();
+                        },
+                        icon: const Icon(Icons.add_a_photo),
                       ),
-                Positioned(
-                  bottom: -10,
-                  left: 80,
-                  child: IconButton(
-                    onPressed: () {
-                      chooseImageFromGallery();
-                    },
-                    icon: const Icon(Icons.add_a_photo),
-                  ),
+                    ),
+                  ],
                 ),
-              ]),
-              const SizedBox(height: 32),
+                const SizedBox(height: 32),
 
-              //username
-              TextInput(
-                hintText: "Benutzername",
-                inputType: TextInputType.text,
-                controller: _usernameController,
-              ),
-              const SizedBox(height: 16),
+                //username
+                TextInput(
+                  hintText: "Benutzername",
+                  inputType: TextInputType.text,
+                  controller: _usernameController,
+                ),
+                const SizedBox(height: 16),
 
-              //email
-              TextInput(
-                hintText: "E-Mail",
-                inputType: TextInputType.emailAddress,
-                controller: _emailController,
-              ),
-              const SizedBox(height: 16),
+                //email
+                TextInput(
+                  hintText: "E-Mail",
+                  inputType: TextInputType.emailAddress,
+                  controller: _emailController,
+                ),
+                const SizedBox(height: 16),
 
-              //passwort
-              TextInput(
-                hintText: "Passwort",
-                inputType: TextInputType.text,
-                controller: _passwordController,
-                isPassword: true,
-              ),
-              const SizedBox(height: 16),
+                //passwort
+                TextInput(
+                  hintText: "Passwort",
+                  inputType: TextInputType.text,
+                  controller: _passwordController,
+                  isPassword: true,
+                ),
+                const SizedBox(height: 16),
 
-              //Bio
-              TextInput(
-                hintText: "Deine persönliche Beschreibung",
-                inputType: TextInputType.text,
-                controller: _beschreibungController,
-              ),
-              const SizedBox(height: 16),
-              //Login button
-              GestureDetector(
-                onTap: () {
-                  register();
-                },
-                child: Container(
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: const BoxDecoration(
+                //Bio
+                TextInput(
+                  hintText: "Deine persönliche Beschreibung",
+                  inputType: TextInputType.text,
+                  controller: _beschreibungController,
+                ),
+                const SizedBox(height: 16),
+                //Login button
+                GestureDetector(
+                  onTap: () {
+                    register();
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    decoration: const BoxDecoration(
                       color: loginRegisterSubmitbuttonColor,
-                      borderRadius: BorderRadius.all(Radius.circular(4))),
-                  child: !loading
-                      ? const Text(
-                          'Registriere',
-                          style: TextStyle(
+                      borderRadius: BorderRadius.all(Radius.circular(4)),
+                    ),
+                    child: !loading
+                        ? const Text(
+                            'Registriere',
+                            style: TextStyle(
                               color: loginRegisterButtonTextColor,
                               fontWeight: FontWeight.bold,
-                              fontSize: 16),
-                        )
-                      : const CircularProgressIndicator(
-                          color: mainColor,
-                        ),
+                              fontSize: 16,
+                            ),
+                          )
+                        : const CircularProgressIndicator(
+                            color: mainColor,
+                          ),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
+                const SizedBox(height: 48),
 
-              const SizedBox(height: 32),
-
-              //Registrieren
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("Du hast bereits einen Account? ",
-                      style: TextStyle(color: Colors.grey)),
-                  GestureDetector(
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const LoginScreen(),
+                //Registrieren
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Du hast bereits einen Account? ",
+                        style: TextStyle(color: Colors.grey)),
+                    GestureDetector(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LoginScreen(),
+                        ),
                       ),
-                    ),
-                    child: const Text(
-                      "Meld dich hier an!",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.white),
-                    ),
-                  )
-                ],
-              ),
-              const SizedBox(height: 32),
-            ],
+                      child: const Text(
+                        "Meld dich hier an!",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.white),
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 32),
+              ],
+            ),
           ),
         ),
       ),

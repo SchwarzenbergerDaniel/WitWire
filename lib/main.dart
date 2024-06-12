@@ -41,6 +41,7 @@ class MyApp extends StatelessWidget {
         home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: ((context, snapshot) {
+            print("TEST");
             if (snapshot.hasError) {
               return Center(child: Text(snapshot.error.toString()));
             } else if (snapshot.connectionState != ConnectionState.active) {
@@ -48,8 +49,11 @@ class MyApp extends StatelessWidget {
             }
             final user = snapshot.data;
             if (user == null) {
+              print("USER IS NULl");
+
               return const LoginScreen();
             }
+            print("ZSER IS NOT NULL");
             return FutureBuilder(
               future: UserData.initLoggedInUser(),
               builder: (context2, valid) {

@@ -91,24 +91,26 @@ class _ShowUserState extends State<ShowUser> {
     if (widget._isMyProfile) {
       return const MyProfileScreen();
     }
+
     return Scaffold(
       appBar: _buildAppBar(),
       body: SingleChildScrollView(
-        controller: _controller,
         child: Column(
           children: [
             const SizedBox(height: 40),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Column(children: [
-                  const SizedBox(height: 10),
-                  CircleAvatar(
-                    radius: 48,
-                    backgroundImage:
-                        Image.network(widget.user["photoURL"]).image,
-                  ),
-                ]),
+                Column(
+                  children: [
+                    const SizedBox(height: 10),
+                    CircleAvatar(
+                      radius: 48,
+                      backgroundImage:
+                          Image.network(widget.user["photoURL"]).image,
+                    ),
+                  ],
+                ),
                 const SizedBox(width: 25),
                 Column(
                   children: [
@@ -119,7 +121,7 @@ class _ShowUserState extends State<ShowUser> {
                             MaterialPageRoute(
                               builder: (context) => UserListScreen(
                                   uids: widget.user["followers"],
-                                  title: "Abonniert"),
+                                  title: "Abonnenten"),
                             ),
                           ),
                           child: Column(
@@ -129,9 +131,7 @@ class _ShowUserState extends State<ShowUser> {
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold),
                               ),
-                              const Text(
-                                "Abonnenten",
-                              ),
+                              const Text("Abonnenten"),
                             ],
                           ),
                         ),
@@ -141,7 +141,7 @@ class _ShowUserState extends State<ShowUser> {
                             MaterialPageRoute(
                               builder: (context) => UserListScreen(
                                   uids: widget.user["following"],
-                                  title: "Abonnenten"),
+                                  title: "Abonniert"),
                             ),
                           ),
                           child: Column(
@@ -151,9 +151,7 @@ class _ShowUserState extends State<ShowUser> {
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold),
                               ),
-                              const Text(
-                                "Abonniert",
-                              ),
+                              const Text("Abonniert"),
                             ],
                           ),
                         ),
@@ -167,10 +165,14 @@ class _ShowUserState extends State<ShowUser> {
                 ),
               ],
             ),
-            PostListViewBuilder(
-              isSortable: true,
-              controller: _controller,
-              postQuery: getStream(),
+            const SizedBox(height: 20),
+            SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: PostListViewBuilder(
+                isSortable: true,
+                controller: _controller,
+                postQuery: getStream(),
+              ),
             ),
           ],
         ),

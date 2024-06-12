@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:witwire/firebaseParser/user_data.dart';
+import 'package:witwire/main.dart';
+import 'package:witwire/screens/loginRegister/login_screen.dart';
 import 'package:witwire/utils/colors.dart';
 import 'package:witwire/widgets/bottomnavbar/bottomnavbar.dart';
 import 'package:witwire/widgets/postlist/post_listview_builder.dart';
@@ -35,6 +38,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 style: const TextStyle(color: mainColor)),
           ],
         ),
+        actions: [
+          ElevatedButton(onPressed: _signOut, child: const Text("Ausloggen"))
+        ],
       ),
       body: PostListViewBuilder(
         isSortable: true,
@@ -43,6 +49,12 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
       ),
       bottomNavigationBar: BottomNavBar(4),
     );
+  }
+
+  Future<void> _signOut() async {
+    await FirebaseAuth.instance.signOut();
+    navigatorKey.currentState!.pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginScreen()));
   }
 
   Query<Map<String, dynamic>> getStream() {

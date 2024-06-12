@@ -1,5 +1,5 @@
+import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:witwire/logik/queryhelper.dart';
@@ -8,7 +8,7 @@ import 'package:witwire/screens/create/userupload/userupload_screen.dart';
 import 'package:witwire/utils/colors.dart';
 
 class UploadImageSelectScreen extends StatefulWidget {
-  UploadImageSelectScreen({super.key}) {
+  UploadImageSelectScreen({Key? key}) {
     QueryHelper.initQueryHelper();
   }
 
@@ -19,6 +19,22 @@ class UploadImageSelectScreen extends StatefulWidget {
 
 class UploadImageSelectScreenState extends State<UploadImageSelectScreen> {
   Uint8List? _selectedImage;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadGalleryImage();
+  }
+
+  void _loadGalleryImage() async {
+    final galleryImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (galleryImage != null) {
+      final bytes = await galleryImage.readAsBytes();
+      _selectedImage = bytes;
+      _imageSelected();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,126 +49,21 @@ class UploadImageSelectScreenState extends State<UploadImageSelectScreen> {
         title: Image.asset('assets/appbar-image.png',
             fit: BoxFit.fill, width: imageWidth),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          //Bild:
-          Center(
-            child: _selectedImage == null
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        onTap: _selectImageFromGallery,
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width *
-                              0.4, // 40% of screen width
-                          height: MediaQuery.of(context).size.width *
-                              0.4, // Maintain aspect ratio
-                          child: Image.asset(
-                            "assets/select-image.png",
-                            fit: BoxFit
-                                .cover, // Ensures the image fits within the box
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 10), // Space between the images
-                      InkWell(
-                        onTap: _selectImageFromCamera,
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width *
-                              0.4, // 40% of screen width
-                          height: MediaQuery.of(context).size.width *
-                              0.4, // Maintain aspect ratio
-                          child: Image.asset(
-                            "assets/camera-image.jpg",
-                            fit: BoxFit
-                                .cover, // Ensures the image fits within the box
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                : SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height * 0.7,
-                    child: Image.memory(
-                      _selectedImage!,
-                    ),
-                  ),
-          ),
-
-          const SizedBox(height: 20),
-          //Button zum hochladen
-          _selectedImage != null
-              ? ElevatedButton(
-                  onPressed: _goToUpload,
-                  style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.blue),
-                    foregroundColor:
-                        MaterialStateProperty.all<Color>(Colors.white),
-                  ),
-                  child: const Text(
-                    "Post",
-                  ),
-                )
-              : const SizedBox(height: 0, width: 0),
-
-          _selectedImage != null
-              ? Column(
-                  children: [
-                    const SizedBox(height: 10),
-                    ElevatedButton(
-                      onPressed: _removeImage,
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.red),
-                        foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.white),
-                      ),
-                      child: const Text(
-                        "Entferne Bild",
-                      ),
-                    ),
-                  ],
-                )
-              : const SizedBox(),
-        ],
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () => _loadGalleryImage(),
+          child: const Text("Wähle Bild"),
+        ),
       ),
     );
   }
 
-  void _goToUpload() {
-    if (_selectedImage != null) {
-      navigatorKey.currentState!.pushReplacement(MaterialPageRoute(
+  void _imageSelected() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
         builder: (context) => UserUploadScreen(image: _selectedImage!),
-      ));
-    }
-  }
-
-  void _selectImageFromGallery() async {
-    final img = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (img == null) return;
-    Uint8List? a = await img.readAsBytes();
-    setState(() {
-      _selectedImage = a;
-    });
-  }
-
-  void _selectImageFromCamera() async {
-    final img = await ImagePicker().pickImage(source: ImageSource.camera);
-    if (img == null) return;
-    Uint8List? a = await img.readAsBytes();
-    setState(() {
-      _selectedImage = a;
-    });
-  }
-
-  void _removeImage() async {
-    setState(() {
-      _selectedImage = null;
-    });
+      ),
+    );
   }
 }

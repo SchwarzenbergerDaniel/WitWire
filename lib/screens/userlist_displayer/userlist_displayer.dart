@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:witwire/firebaseParser/user_data.dart';
 import 'package:witwire/widgets/bottomnavbar/bottomnavbar.dart';
-import 'package:witwire/widgets/userpreviews/userprevOnClickProfile.dart';
+import 'package:witwire/widgets/userpreviews/userprev_onclick_gotoprofile.dart';
 
 class UserListScreen extends StatefulWidget {
   final List uids;
@@ -24,6 +24,7 @@ class _UserListScreenState extends State<UserListScreen> {
     });
   }
 
+  //TODO: Error. FIlters the uids not the usernames
   void filter(String searchText) {
     List results = [];
     if (searchText.isEmpty) {

@@ -5,7 +5,7 @@ import 'package:witwire/widgets/appbar/friends_and_chat_appbar.dart';
 import 'package:witwire/widgets/appbar/search_appbar.dart';
 import 'package:witwire/widgets/bottomnavbar/bottomnavbar.dart';
 import 'package:witwire/widgets/postlist/post_listview_builder.dart';
-import 'package:witwire/widgets/userpreviews/userprevOnClickProfile.dart';
+import 'package:witwire/widgets/userpreviews/userprev_onclick_gotoprofile.dart';
 
 class SearchScreen extends StatefulWidget {
   final String? startSearch;
